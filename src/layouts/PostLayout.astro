@@ -1,0 +1,66 @@
+---
+import BaseLayout from "./BaseLayout.astro";
+
+const fm = Astro.props.frontmatter ?? {};
+const title = fm.title ?? "";
+const date = fm.date ?? "";
+const tags: string[] = Array.isArray(fm.tags) ? fm.tags : [];
+const readingTime = fm.readingTime ?? "";
+const description = fm.description ?? "";
+---
+
+<BaseLayout title={title} description={description}>
+  <article>
+    <header class="post-header">
+      <h1>{title}</h1>
+      <div class="date">
+        {date}
+        {readingTime && ` · ${readingTime}`}
+      </div>
+      <div class="tags">
+        {tags.length > 0 && tags.map((tag) => (
+          <span class="tag">{tag}</span>
+        ))}
+      </div>
+    </header>
+
+    <div class="post-content">
+      <slot />
+    </div>
+
+    <div class="giscus" style="margin-top:60px;padding-top:40px;border-top:1px solid var(--border)"></div>
+  </article>
+</BaseLayout>
+
+<script>
+  const giscusDiv = document.querySelector(".giscus");
+  if (giscusDiv) {
+    const script = document.createElement("script");
+    script.src = "https://giscus.app/client.js";
+    script.setAttribute("data-repo", "wzl2223096755/Blog");
+    script.setAttribute("data-repo-id", "R_kgDOSu6jlg");
+    script.setAttribute("data-category", "Announcements");
+    script.setAttribute("data-category-id", "DIC_kwDOSu6jls4C-W8B");
+    script.setAttribute("data-mapping", "title");
+    script.setAttribute("data-strict", "0");
+    script.setAttribute("data-reactions-enabled", "1");
+    script.setAttribute("data-emit-metadata", "0");
+    script.setAttribute("data-input-position", "bottom");
+    script.setAttribute("data-theme", document.body.classList.contains("light") ? "light" : "dark");
+    script.setAttribute("data-lang", "zh-CN");
+    script.setAttribute("data-loading", "lazy");
+    script.setAttribute("crossorigin", "anonymous");
+    script.async = true;
+    giscusDiv.appendChild(script);
+
+    document.getElementById("theme-toggle")?.addEventListener("click", () => {
+      const frame = giscusDiv.querySelector("iframe");
+      if (frame) {
+        frame.contentWindow?.postMessage(
+          { giscus: { setConfig: { theme: document.body.classList.contains("light") ? "light" : "dark" } } },
+          "https://giscus.app"
+        );
+      }
+    });
+  }
+</script>

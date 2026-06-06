@@ -1,0 +1,20 @@
+{
+  "name": "academic-blog-astro",
+  "type": "module",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro build && npx wrangler pages dev ./dist",
+    "deploy": "astro build && npx wrangler pages deploy ./dist"
+  },
+  "dependencies": {
+    "@astrojs/cloudflare": "^12.5.0",
+    "@astrojs/rss": "^4.0.18",
+    "astro": "^5.7.0"
+  },
+  "devDependencies": {
+    "wrangler": "^4.98.0"
+  }
+}

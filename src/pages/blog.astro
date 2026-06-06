@@ -1,0 +1,38 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const posts = Object.values(import.meta.glob("./posts/*.md", { eager: true }));
+const sortedPosts = posts.sort(
+  (a, b) => new Date(b.frontmatter.date) - new Date(a.frontmatter.date)
+);
+---
+
+<BaseLayout title="博客" description="记录研究过程中的思考、发现与总结。">
+  <div class="container">
+    <section class="hero">
+      <h1>博客</h1>
+      <p class="subtitle">记录研究过程中的思考、发现与总结。</p>
+    </section>
+
+    <section class="section">
+      <ul class="post-list">
+        {
+          sortedPosts.map((post) => (
+            <li class="post-item">
+              <div class="date">{post.frontmatter.date}</div>
+              <h2><a href={post.url}>{post.frontmatter.title}</a></h2>
+              {post.frontmatter.description && (
+                <p class="excerpt">{post.frontmatter.description}</p>
+              )}
+              <div class="tags">
+                {post.frontmatter.tags?.map((tag: string) => (
+                  <span class="tag">{tag}</span>
+                ))}
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+  </div>
+</BaseLayout>
