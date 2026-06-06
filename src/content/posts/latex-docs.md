@@ -1,10 +1,10 @@
 ---
 title: "用 LaTeX 写技术文档：从入门到实践"
-date: "2026.02.05"
+published: 2026-02-05
 tags: ["LaTeX", "文档写作", "排版"]
+category: "技术笔记"
 description: "从模板选择到排版技巧的 LaTeX 实践总结，适合技术写作初学者。"
 readingTime: "预计阅读 12 分钟"
-layout: ../../layouts/PostLayout.astro
 ---
 
 在技术写作领域，选择正确的工具往往比写作本身更能影响最终成果的质量。LaTeX 作为一个存在了四十多年的排版系统，至今仍然是学术界和工程界的首选。这篇文章将带你从零搭建 LaTeX 写作环境，并分享一些实践中积累的技巧。

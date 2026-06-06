@@ -18,14 +18,12 @@ const { title, description } = Astro.props;
     {description && <meta name="description" content={description} />}
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
-      rel="stylesheet"
-    />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
     <link rel="alternate" type="application/rss+xml" title="王忠亮的博客" href="https://wzl12345.pages.dev/rss.xml" />
   </head>
   <body>
     <div id="progress-bar"></div>
+    <div id="cursor-glow"></div>
 
     <nav>
       <div class="inner">
@@ -33,6 +31,8 @@ const { title, description } = Astro.props;
         <div class="links">
           <a href="/" class:list={{ active: Astro.url.pathname === "/" }}>主页</a>
           <a href="/blog" class:list={{ active: Astro.url.pathname.startsWith("/blog") }}>博客</a>
+          <a href="/categories" class:list={{ active: Astro.url.pathname === "/categories" }}>分类</a>
+          <a href="/tags" class:list={{ active: Astro.url.pathname === "/tags" }}>标签</a>
           <a href="/about" class:list={{ active: Astro.url.pathname === "/about" }}>关于</a>
         </div>
       </div>
@@ -43,19 +43,39 @@ const { title, description } = Astro.props;
     </main>
 
     <footer>
-      <a href="/rss.xml" style="color:var(--text-light);font-size:0.82rem">RSS 订阅</a>
+      <a href="/rss.xml" style="color:var(--text-muted);font-size:0.78rem">RSS 订阅</a>
       <br />
       &copy; 2026 王忠亮
     </footer>
 
     <script>
-      window.addEventListener("scroll", () => {
-        const bar = document.getElementById("progress-bar");
-        if (!bar) return;
-        const scrollTop = document.documentElement.scrollTop;
-        const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
-        const progress = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
-        bar.style.width = progress + "%";
+      function initProgressBar() {
+        window.addEventListener("scroll", () => {
+          const bar = document.getElementById("progress-bar");
+          if (!bar) return;
+          const scrollTop = document.documentElement.scrollTop;
+          const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+          bar.style.width = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 + "%" : "0%";
+        });
+      }
+
+      function initCursorGlow() {
+        const glow = document.getElementById("cursor-glow");
+        if (!glow) return;
+        let x = 0, y = 0, mx = 0, my = 0;
+        document.addEventListener("mousemove", e => { mx = e.clientX; my = e.clientY; });
+        function animate() {
+          x += (mx - x) * 0.06;
+          y += (my - y) * 0.06;
+          glow.style.transform = `translate(${x - 150}px, ${y - 150}px)`;
+          requestAnimationFrame(animate);
+        }
+        animate();
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        initProgressBar();
+        initCursorGlow();
       });
     </script>
   </body>

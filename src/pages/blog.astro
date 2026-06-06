@@ -1,38 +1,43 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import Sidebar from "../components/Sidebar.astro";
+import { getCollection } from "astro:content";
 
-const posts = Object.values(import.meta.glob("./posts/*.md", { eager: true }));
+const posts = await getCollection("posts");
 const sortedPosts = posts.sort(
-  (a, b) => new Date(b.frontmatter.date) - new Date(a.frontmatter.date)
+  (a, b) => new Date(b.data.published) - new Date(a.data.published)
 );
 ---
 
 <BaseLayout title="博客" description="记录研究过程中的思考、发现与总结。">
-  <div class="container">
-    <section class="hero">
-      <h1>博客</h1>
-      <p class="subtitle">记录研究过程中的思考、发现与总结。</p>
-    </section>
+  <div class="layout">
+    <div class="layout-main">
+      <section class="hero">
+        <h1>博客</h1>
+        <p class="subtitle">记录研究过程中的思考、发现与总结。</p>
+      </section>
 
-    <section class="section">
-      <ul class="post-list">
-        {
-          sortedPosts.map((post) => (
-            <li class="post-item">
-              <div class="date">{post.frontmatter.date}</div>
-              <h2><a href={post.url}>{post.frontmatter.title}</a></h2>
-              {post.frontmatter.description && (
-                <p class="excerpt">{post.frontmatter.description}</p>
-              )}
-              <div class="tags">
-                {post.frontmatter.tags?.map((tag: string) => (
-                  <span class="tag">{tag}</span>
-                ))}
-              </div>
-            </li>
-          ))
-        }
-      </ul>
-    </section>
+      <section class="section">
+        <ul class="post-list">
+          {sortedPosts.map((post) => {
+            const d = post.data.published;
+            const dateStr = `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, '0')}.${String(d.getDate()).padStart(2, '0')}`;
+            return (
+              <li class="post-item">
+                <div class="date">{dateStr}</div>
+                <h2><a href={`/posts/${post.slug}/`}>{post.data.title}</a></h2>
+                <p class="excerpt">{post.data.description}</p>
+                <div class="tags">
+                  {post.data.tags?.map((tag: string) => <span class="tag">{tag}</span>)}
+                </div>
+              </li>
+            );
+          })}
+        </ul>
+      </section>
+    </div>
+    <div class="layout-sidebar">
+      <Sidebar posts={posts} />
+    </div>
   </div>
 </BaseLayout>

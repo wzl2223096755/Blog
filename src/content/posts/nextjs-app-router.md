@@ -1,10 +1,10 @@
 ---
 title: "Next.js App Router 深入浅出"
-date: "2026.05.15"
+published: 2026-05-15
 tags: ["Next.js", "React", "服务端组件"]
+category: "技术笔记"
 description: "App Router 的核心概念与架构，从路由设计到服务端组件的全面解析。"
 readingTime: "预计阅读 10 分钟"
-layout: ../../layouts/PostLayout.astro
 ---
 
 Next.js 的 App Router 是一次彻底的路由革命。它不只是换了个文件组织方式，而是从根本上改变了我们构建 React 应用的方式——从客户端渲染走向服务端优先。

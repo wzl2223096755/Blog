@@ -1,0 +1,34 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Sidebar from "../components/Sidebar.astro";
+import { getCollection } from "astro:content";
+
+const posts = await getCollection("posts");
+const tagMap = new Map<string, number>();
+for (const post of posts) {
+  for (const tag of post.data.tags) {
+    tagMap.set(tag, (tagMap.get(tag) || 0) + 1);
+  }
+}
+const sorted = [...tagMap.entries()].sort((a, b) => b[1] - a[1]);
+---
+
+<BaseLayout title="标签" description="文章标签">
+  <div class="layout">
+    <div class="layout-main">
+      <div class="page-header">
+        <h1>所有标签</h1>
+        <p class="subtitle">共 {tagMap.size} 个标签</p>
+      </div>
+
+      <div class="tag-cloud">
+        {sorted.map(([tag]) => (
+          <a href={`/tag/${encodeURIComponent(tag)}/`}>#{tag}</a>
+        ))}
+      </div>
+    </div>
+    <div class="layout-sidebar">
+      <Sidebar posts={posts} />
+    </div>
+  </div>
+</BaseLayout>

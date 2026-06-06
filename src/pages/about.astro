@@ -1,50 +1,47 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import Sidebar from "../components/Sidebar.astro";
+import { getCollection } from "astro:content";
+
+const posts = await getCollection("posts");
 ---
 
 <BaseLayout title="关于" description="了解王忠亮 - 软件工程本科生、全栈开发学习者。">
-  <div class="container">
-    <section class="hero">
-      <h1>关于我</h1>
-      <p class="subtitle">软件工程本科生 · 全栈开发学习者</p>
-    </section>
+  <div class="layout">
+    <div class="layout-main">
+      <section class="hero">
+        <h1>关于我</h1>
+        <p class="subtitle">软件工程本科生 · 全栈开发学习者</p>
+      </section>
 
-    <section class="about-section">
-      <h2>个人简介</h2>
-      <p>
-        我是王忠亮，软件工程专业本科生。热爱编程，
-        专注于 Web 全栈开发、开源项目与前沿技术探索。
-      </p>
-    </section>
+      <section class="about-section" style="padding:28px 32px;border-radius:12px;background:var(--bg-card);border:1px solid var(--border);margin-bottom:14px;">
+        <h2>个人简介</h2>
+        <p>我是王忠亮，软件工程专业本科生。热爱编程，专注于 Web 全栈开发、开源项目与前沿技术探索。</p>
+      </section>
 
-    <section class="about-section">
-      <h2>教育背景</h2>
-      <p>
-        <strong>本科 · 软件工程</strong> (2024 - 至今)<br />
-        待补充
-      </p>
-      <p>
-        <strong>硕士 · [专业名称]</strong> (20XX - 20XX)<br />
-        待补充
-      </p>
-      <p>
-        <strong>学士 · [专业名称]</strong> (20XX - 20XX)<br />
-        待补充
-      </p>
-    </section>
+      <section class="about-section" style="padding:28px 32px;border-radius:12px;background:var(--bg-card);border:1px solid var(--border);margin-bottom:14px;">
+        <h2>教育背景</h2>
+        <p><strong>本科 · 软件工程</strong> (2024 - 至今)<br />待补充</p>
+        <p><strong>硕士 · [专业名称]</strong> (20XX - 20XX)<br />待补充</p>
+        <p><strong>学士 · [专业名称]</strong> (20XX - 20XX)<br />待补充</p>
+      </section>
 
-    <section class="about-section">
-      <h2>荣誉与奖励</h2>
-      <p>• 国家励志奖学金 (2025)</p>
-      <p>• 校级优秀学生 (2024)</p>
-      <p>• 程序设计竞赛获奖 (2024)</p>
-    </section>
+      <section class="about-section" style="padding:28px 32px;border-radius:12px;background:var(--bg-card);border:1px solid var(--border);margin-bottom:14px;">
+        <h2>荣誉与奖励</h2>
+        <p>• 国家励志奖学金 (2025)</p>
+        <p>• 校级优秀学生 (2024)</p>
+        <p>• 程序设计竞赛获奖 (2024)</p>
+      </section>
 
-    <section class="about-section">
-      <h2>联系方式</h2>
-      <p>📧 Email: wzl2223096755@gmail.com</p>
-      <p>🐙 GitHub: <a href="https://github.com/wzl2223096755">github.com/wzl2223096755</a></p>
-      <p>🏫 软件工程专业</p>
-    </section>
+      <section class="about-section" style="padding:28px 32px;border-radius:12px;background:var(--bg-card);border:1px solid var(--border);margin-bottom:14px;">
+        <h2>联系方式</h2>
+        <p>📧 Email: wzl2223096755@gmail.com</p>
+        <p>🐙 GitHub: <a href="https://github.com/wzl2223096755">github.com/wzl2223096755</a></p>
+        <p>🏫 软件工程专业</p>
+      </section>
+    </div>
+    <div class="layout-sidebar">
+      <Sidebar posts={posts} />
+    </div>
   </div>
 </BaseLayout>

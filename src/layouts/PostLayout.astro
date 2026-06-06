@@ -1,24 +1,24 @@
 ---
 import BaseLayout from "./BaseLayout.astro";
+import type { CollectionEntry } from "astro:content";
 
-const fm = Astro.props.frontmatter ?? {};
-const title = fm.title ?? "";
-const date = fm.date ?? "";
-const tags: string[] = Array.isArray(fm.tags) ? fm.tags : [];
-const readingTime = fm.readingTime ?? "";
-const description = fm.description ?? "";
+type Post = CollectionEntry<"posts">;
+
+const { post } = Astro.props as { post: Post };
+const { data: fm } = post;
+const dateStr = `${fm.published.getFullYear()}.${String(fm.published.getMonth() + 1).padStart(2, '0')}.${String(fm.published.getDate()).padStart(2, '0')}`;
 ---
 
-<BaseLayout title={title} description={description}>
+<BaseLayout title={fm.title} description={fm.description}>
   <article>
     <header class="post-header">
-      <h1>{title}</h1>
+      <h1>{fm.title}</h1>
       <div class="date">
-        {date}
-        {readingTime && ` · ${readingTime}`}
+        {dateStr}
+        {fm.readingTime && ` · ${fm.readingTime}`}
       </div>
       <div class="tags">
-        {tags.length > 0 && tags.map((tag) => (
+        {fm.tags.length > 0 && fm.tags.map((tag) => (
           <span class="tag">{tag}</span>
         ))}
       </div>
