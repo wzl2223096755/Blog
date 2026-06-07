@@ -24,6 +24,14 @@ export const galleryConfig: GalleryConfig = {
 			tags: ["崩坏星穹铁道", "流萤"],
 		},
 		{
+			id: "aemeath-2026",
+			name: "爱弥斯",
+			description: "来自鸣潮的电子幽灵少女，星辉数据流中的守护者。",
+			location: "鸣潮 / Wuthering Waves",
+			date: "2026-06-07",
+			tags: ["鸣潮", "爱弥斯", "Aemeath"],
+		},
+		{
 			id: "encrypted-test",
 			name: "加密相册示例",
 			description:
