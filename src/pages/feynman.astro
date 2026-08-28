@@ -6,36 +6,26 @@ const pageDescription = "基于费曼学习法和间隔重复算法的学习工�
 ---
 
 <MainGridLayout title={pageTitle} description={pageDescription}>
-  <div class="feynman-container">
-    <div class="feynman-app">
-      <div class="wrap">
-        <header>
-          <div class="eyebrow">Study Log · Habit Grid</div>
-          <h1>费曼学习卡 · 习惯记录本</h1>
-          <p class="sub">学一个概念，就用自己的话讲一遍；讲不清楚的地方，回去补；补完再简化一次。习惯自己定义、每天打卡；下面的计划表用来安排每周固定的时间块，内容都自己填。</p>
-        </header>
-        <div id="app" class="loading-state">正在加载数据…</div>
-      </div>
-    </div>
+  <div class="feynman-page-container">
+    <div id="app" class="loading-state">正在加载数据…</div>
   </div>
 </MainGridLayout>
 
-<style>
+<style is:global>
   @import "../styles/feynman.css";
-  
-  .feynman-container {
-    /* 移除博客默认的卡片样式，让费曼卡有自己的背景 */
-    margin: -2.5rem;
-    padding: 2.5rem;
-    background: var(--feynman-paper);
-    border-radius: var(--radius-large);
+</style>
+
+<style>
+  .feynman-page-container {
+    /* 扩展到全宽，覆盖博客默认容器样式 */
+    margin: -2.5rem -2.5rem 0;
+    padding: 0;
     min-height: 600px;
   }
   
   @media (max-width: 768px) {
-    .feynman-container {
-      margin: -1.5rem;
-      padding: 1.5rem;
+    .feynman-page-container {
+      margin: -1.5rem -1.5rem 0;
     }
   }
 </style>
