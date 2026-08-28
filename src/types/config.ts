@@ -184,6 +184,7 @@ export enum LinkPreset {
 	Gallery = 7,
 	Tags = 8,
 	Categories = 9,
+	Feynman = 10,
 }
 
 export type NavBarLink = {

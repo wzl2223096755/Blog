@@ -53,4 +53,9 @@ export const LinkPresets: { [key in LinkPreset]: NavBarLink } = {
 		url: "/categories/",
 		icon: "material-symbols:folder-open-rounded",
 	},
+	[LinkPreset.Feynman]: {
+		name: i18n(I18nKey.feynman),
+		url: "/feynman/",
+		icon: "material-symbols:school",
+	},
 };

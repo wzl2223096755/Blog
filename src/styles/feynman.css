@@ -1,0 +1,1106 @@
+/* ================================================
+   费曼学习卡样式 - 完全适配博客主题系统
+   ================================================ */
+
+/* ===== 变量映射：费曼卡 → 博客主题 ===== */
+.feynman-app {
+  /* 基础颜色 */
+  --paper: var(--page-bg);
+  --card: var(--card-bg);
+  --ink: var(--deep-text);
+  --ink-soft: var(--content-meta);
+  --blue: var(--primary);
+  --blue-soft: var(--btn-regular-bg);
+  --sage: oklch(0.70 0.10 120);
+  --sage-soft: oklch(0.90 0.05 120);
+  --rust: oklch(0.65 0.15 25);
+  --border: var(--line-divider);
+  --grid-line: transparent;
+  
+  /* 字体 */
+  font-family: 'IBM Plex Sans', sans-serif;
+  
+  /* 布局 */
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+/* 暗色模式适配 */
+:root.dark .feynman-app {
+  --sage: oklch(0.75 0.10 120);
+  --sage-soft: oklch(0.30 0.05 120);
+  --rust: oklch(0.70 0.15 25);
+}
+
+/* ===== 基础元素重置 ===== */
+.feynman-app * {
+  box-sizing: border-box;
+}
+
+.feynman-app {
+  background-color: transparent;
+  background-image: none;
+}
+
+.wrap {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 0;
+}
+
+/* ===== 标题样式 ===== */
+.feynman-app .eyebrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--primary);
+  margin-bottom: 6px;
+}
+
+.feynman-app h1 {
+  font-family: 'Newsreader', serif;
+  font-style: italic;
+  font-weight: 500;
+  font-size: 30px;
+  margin: 0 0 8px;
+  color: var(--deep-text);
+}
+
+.feynman-app .sub {
+  font-size: 13.5px;
+  color: var(--content-meta);
+  max-width: 580px;
+  line-height: 1.65;
+  margin-bottom: 28px;
+}
+
+/* ===== 布局 ===== */
+.feynman-app .layout {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: 22px;
+  align-items: start;
+  margin-bottom: 22px;
+}
+
+@media (max-width: 800px) {
+  .feynman-app .layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ===== 面板/卡片样式 ===== */
+.feynman-app .panel {
+  background: var(--card-bg);
+  border: 1px solid var(--line-divider);
+  border-radius: var(--radius-large);
+  padding: 20px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  transition: box-shadow var(--duration-normal) var(--ease-standard);
+}
+
+.feynman-app .panel:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.feynman-app .panel-title {
+  font-family: 'Newsreader', serif;
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0 0 4px;
+  color: var(--deep-text);
+}
+
+.feynman-app .panel-hint {
+  font-size: 12.5px;
+  color: var(--content-meta);
+  margin: 0 0 16px;
+  line-height: 1.5;
+}
+
+/* ===== 按钮样式 ===== */
+.feynman-app button {
+  font-family: 'IBM Plex Sans', sans-serif;
+  cursor: pointer;
+  border-radius: var(--radius-md);
+  border: 1px solid transparent;
+  transition: all var(--duration-normal) var(--ease-standard);
+}
+
+.feynman-app .btn-primary {
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 9px 16px;
+  font-size: 13.5px;
+  font-weight: 500;
+}
+
+.feynman-app .btn-primary:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.feynman-app .btn-primary:active {
+  transform: translateY(0);
+}
+
+.feynman-app .btn-text {
+  background: none;
+  border: none;
+  color: var(--content-meta);
+  font-size: 12px;
+  padding: 4px 2px;
+  text-decoration: underline;
+}
+
+.feynman-app .btn-text:hover {
+  color: var(--primary);
+}
+
+.feynman-app .btn-text.danger {
+  color: var(--rust);
+}
+
+.feynman-app .btn-text.danger:hover {
+  opacity: 0.8;
+}
+
+/* ===== 表单元素 ===== */
+.feynman-app input[type=text],
+.feynman-app textarea,
+.feynman-app select {
+  width: 100%;
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 13.5px;
+  padding: 8px 10px;
+  border: 1px solid var(--line-divider);
+  border-radius: var(--radius-md);
+  background: var(--card-bg);
+  color: var(--deep-text);
+  transition: border-color var(--duration-normal);
+}
+
+.feynman-app input[type=text]:focus,
+.feynman-app textarea:focus,
+.feynman-app select:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+.feynman-app textarea {
+  resize: vertical;
+  min-height: 54px;
+  line-height: 1.55;
+  white-space: pre-wrap;
+}
+
+.feynman-app label.field-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.03em;
+  color: var(--primary);
+  display: block;
+  margin: 12px 0 4px;
+}
+
+.feynman-app label.field-label:first-child {
+  margin-top: 0;
+}
+
+/* ===== 新卡片表单 ===== */
+.feynman-app .new-card-form {
+  margin-bottom: 18px;
+}
+
+.feynman-app .form-title {
+  font-family: 'Newsreader', serif;
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 4px;
+  color: var(--primary);
+}
+
+.feynman-app .subject-row {
+  display: flex;
+  gap: 8px;
+}
+
+@media (max-width: 480px) {
+  .feynman-app .subject-row {
+    flex-direction: column;
+  }
+  .feynman-app .subject-row select {
+    width: 100%;
+  }
+}
+
+.feynman-app .subject-row select {
+  width: 150px;
+  flex: 0 0 auto;
+}
+
+.feynman-app .subject-row input {
+  flex: 1;
+}
+
+.feynman-app .form-actions {
+  margin-top: 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* ===== 科目筛选 ===== */
+.feynman-app .subject-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.feynman-app .filter-chip {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  padding: 4px 10px;
+  border: 1px solid var(--line-divider);
+  border-radius: var(--radius-sm);
+  background: var(--card-bg);
+  color: var(--content-meta);
+  cursor: pointer;
+  transition: all var(--duration-normal);
+}
+
+.feynman-app .filter-chip:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.feynman-app .filter-chip.active {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: white;
+}
+
+/* ===== 学习卡片样式 ===== */
+.feynman-app .fcard {
+  position: relative;
+  border: 1px solid var(--line-divider);
+  border-radius: var(--radius-md);
+  background: var(--card-bg);
+  padding: 13px 16px 13px 18px;
+  margin-bottom: 10px;
+  transition: all var(--duration-normal);
+}
+
+.feynman-app .fcard::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 10px;
+  bottom: 10px;
+  width: 3px;
+  background: var(--primary);
+  opacity: 0.3;
+  border-radius: 2px;
+  transition: opacity var(--duration-normal);
+}
+
+.feynman-app .fcard:hover {
+  border-color: var(--primary);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.feynman-app .fcard:hover::before {
+  opacity: 0.7;
+}
+
+.feynman-app .fcard.due {
+  border-color: var(--rust);
+}
+
+.feynman-app .fcard.due::before {
+  background: var(--rust);
+  opacity: 1;
+}
+
+.feynman-app .fcard.editing {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 1px var(--primary);
+}
+
+.feynman-app .fcard-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  cursor: pointer;
+  gap: 10px;
+}
+
+.feynman-app .fcard-topic-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.feynman-app .subject-tag {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  color: var(--primary);
+  letter-spacing: 0.02em;
+}
+
+.feynman-app .fcard-topic {
+  font-family: 'Newsreader', serif;
+  font-size: 15.5px;
+  font-weight: 500;
+  color: var(--deep-text);
+}
+
+.feynman-app .fcard-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.feynman-app .fcard-date {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: var(--content-meta);
+  white-space: nowrap;
+}
+
+.feynman-app .fcard-body {
+  margin-top: 10px;
+  display: none;
+}
+
+.feynman-app .fcard.open .fcard-body {
+  display: block;
+}
+
+.feynman-app .fcard-step {
+  margin-bottom: 8px;
+  font-size: 13px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+.feynman-app .fcard-step .step-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  color: var(--primary);
+  display: block;
+  margin-bottom: 2px;
+}
+
+.feynman-app .fcard-actions {
+  margin-top: 8px;
+}
+
+/* ===== 徽章样式 ===== */
+.feynman-app .badge {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  padding: 2px 7px;
+  border-radius: var(--radius-sm);
+  display: inline-block;
+}
+
+.feynman-app .badge-new {
+  background: var(--blue-soft);
+  color: var(--primary);
+}
+
+.feynman-app .badge-due {
+  background: var(--rust);
+  color: white;
+}
+
+.feynman-app .badge-learning {
+  background: var(--sage-soft);
+  color: var(--sage);
+}
+
+.feynman-app .badge-mastered {
+  background: var(--muted);
+  color: var(--content-meta);
+}
+
+.feynman-app .badge-relearn {
+  background: var(--blue-soft);
+  color: var(--rust);
+}
+
+.feynman-app .due-badge,
+.feynman-app .new-badge {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  padding: 2px 7px;
+  border-radius: var(--radius-sm);
+  display: inline-block;
+  margin-left: 6px;
+  vertical-align: middle;
+}
+
+.feynman-app .due-badge {
+  background: var(--rust);
+  color: white;
+}
+
+.feynman-app .new-badge {
+  background: var(--blue-soft);
+  color: var(--primary);
+}
+
+.feynman-app .tip-badge {
+  display: inline-block;
+  background: var(--primary);
+  color: white;
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  margin-left: 6px;
+  cursor: help;
+}
+
+/* ===== 复习按钮 ===== */
+.feynman-app .review-row {
+  margin-top: 10px;
+}
+
+.feynman-app .review-btns {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+.feynman-app .review-btn {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--line-divider);
+  background: var(--card-bg);
+  color: var(--deep-text);
+  transition: all var(--duration-normal);
+}
+
+.feynman-app .review-btn:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+  transform: translateY(-1px);
+}
+
+.feynman-app .review-btn.again:hover {
+  border-color: var(--rust);
+  color: var(--rust);
+}
+
+.feynman-app .review-btn.good {
+  border-color: var(--sage);
+  color: var(--sage);
+}
+
+.feynman-app .review-btn.easy {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+/* ===== 盲点清单 ===== */
+.feynman-app .gap-bank {
+  margin-top: 22px;
+  border-top: 1px dashed var(--line-divider);
+  padding-top: 16px;
+}
+
+.feynman-app .gap-bank-title {
+  font-family: 'Newsreader', serif;
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: var(--deep-text);
+}
+
+.feynman-app .gap-item {
+  display: flex;
+  gap: 8px;
+  padding: 8px 10px;
+  border: 1px solid var(--line-divider);
+  border-radius: var(--radius-sm);
+  margin-bottom: 8px;
+  background: var(--card-bg);
+  transition: opacity var(--duration-normal);
+}
+
+.feynman-app .gap-item.done {
+  opacity: 0.55;
+}
+
+.feynman-app .gap-item.done .gap-text {
+  text-decoration: line-through;
+}
+
+.feynman-app .gap-check {
+  cursor: pointer;
+  font-size: 15px;
+  color: var(--sage);
+  line-height: 1.4;
+  user-select: none;
+  transition: color var(--duration-normal);
+}
+
+.feynman-app .gap-check:hover {
+  color: var(--rust);
+}
+
+.feynman-app .gap-text {
+  font-size: 13px;
+  line-height: 1.55;
+  flex: 1;
+}
+
+.feynman-app .gap-topic {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  color: var(--primary);
+  margin-bottom: 2px;
+}
+
+/* ===== 习惯记录表格 ===== */
+.feynman-app .habit-add-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.feynman-app .week-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  color: var(--content-meta);
+}
+
+.feynman-app .week-nav button {
+  background: none;
+  border: none;
+  color: var(--primary);
+  font-size: 12.5px;
+  padding: 2px 4px;
+  cursor: pointer;
+}
+
+.feynman-app .week-nav .btn-today {
+  color: var(--rust);
+}
+
+.feynman-app table.habit-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+.feynman-app table.habit-table th,
+.feynman-app table.habit-table td {
+  text-align: center;
+  padding: 6px 2px;
+  border: 1px solid var(--line-divider);
+}
+
+.feynman-app table.habit-table th {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 400;
+  color: var(--content-meta);
+  font-size: 10px;
+  background: var(--muted);
+}
+
+.feynman-app table.habit-table td.habit-name-cell {
+  text-align: left;
+  font-size: 12px;
+  padding-right: 4px;
+  max-width: 84px;
+  word-break: break-word;
+  line-height: 1.3;
+}
+
+.feynman-app th.is-today,
+.feynman-app td.is-today {
+  background: var(--blue-soft);
+}
+
+.feynman-app th.is-today {
+  color: var(--primary);
+  font-weight: 500;
+}
+
+.feynman-app .check-box {
+  width: 21px;
+  height: 21px;
+  border: 1px solid var(--line-divider);
+  border-radius: var(--radius-sm);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background: var(--card-bg);
+  font-size: 12px;
+  color: var(--sage);
+  user-select: none;
+  transition: all var(--duration-normal);
+}
+
+.feynman-app .check-box.checked {
+  background: var(--sage-soft);
+  border-color: var(--sage);
+}
+
+.feynman-app .habit-row-remove,
+.feynman-app .slot-row-remove {
+  background: none;
+  border: none;
+  color: var(--content-meta);
+  font-size: 12px;
+  cursor: pointer;
+  padding: 0 0 0 3px;
+}
+
+.feynman-app .habit-row-remove:hover,
+.feynman-app .slot-row-remove:hover {
+  color: var(--rust);
+}
+
+.feynman-app .habit-streak {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: var(--rust);
+  margin-top: 3px;
+}
+
+.feynman-app .streak-cell {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: var(--sage);
+}
+
+/* ===== 周计划表 ===== */
+.feynman-app .full-width {
+  margin-top: 22px;
+}
+
+.feynman-app .schedule-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.feynman-app table.schedule-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  min-width: 640px;
+}
+
+.feynman-app table.schedule-table th,
+.feynman-app table.schedule-table td {
+  padding: 5px 4px;
+  vertical-align: top;
+  border: 1px solid var(--line-divider);
+}
+
+.feynman-app table.schedule-table th {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 400;
+  color: var(--content-meta);
+  font-size: 10.5px;
+  text-align: center;
+  background: var(--muted);
+}
+
+.feynman-app .slot-label-input,
+.feynman-app .cell-input {
+  width: 100%;
+  font-size: 11.5px;
+  padding: 5px 6px;
+  min-height: 36px;
+  line-height: 1.4;
+  resize: vertical;
+  overflow: hidden;
+  border: 1px solid var(--line-divider);
+  border-radius: var(--radius-sm);
+  background: var(--card-bg);
+  color: var(--deep-text);
+}
+
+.feynman-app .cell-input {
+  font-size: 12px;
+  min-height: 42px;
+  min-width: 84px;
+}
+
+.feynman-app .slot-row-remove {
+  vertical-align: top;
+  padding: 6px 0 0 3px;
+}
+
+.feynman-app .add-slot-row {
+  margin-top: 10px;
+}
+
+/* ===== 统计样式 ===== */
+.feynman-app .stats-line {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11.5px;
+  color: var(--content-meta);
+  letter-spacing: 0.02em;
+  margin-bottom: 14px;
+}
+
+.feynman-app .stats-line b {
+  color: var(--primary);
+  font-weight: 500;
+}
+
+.feynman-app .stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.feynman-app .stat-card {
+  background: var(--card-bg);
+  border: 1px solid var(--line-divider);
+  border-radius: var(--radius-md);
+  padding: 12px;
+  text-align: center;
+}
+
+.feynman-app .stat-value {
+  font-family: 'Newsreader', serif;
+  font-size: 28px;
+  font-weight: 600;
+  color: var(--primary);
+  margin-bottom: 4px;
+}
+
+.feynman-app .stat-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  color: var(--content-meta);
+  letter-spacing: 0.02em;
+}
+
+.feynman-app .progress-bar {
+  width: 100%;
+  height: 8px;
+  background: var(--blue-soft);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  margin-top: 8px;
+}
+
+.feynman-app .progress-fill {
+  height: 100%;
+  background: var(--primary);
+  transition: width 0.3s ease;
+}
+
+/* ===== 空状态 ===== */
+.feynman-app .empty-state {
+  font-size: 13px;
+  color: var(--content-meta);
+  padding: 32px 16px;
+  text-align: center;
+  border: 1px dashed var(--line-divider);
+  border-radius: var(--radius-md);
+  background: var(--muted);
+}
+
+/* ===== 模态框 ===== */
+.feynman-app .modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: var(--z-modal-backdrop);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(4px);
+}
+
+.feynman-app .modal-content {
+  background: var(--card-bg);
+  border-radius: var(--radius-xl);
+  padding: 24px;
+  max-width: min(700px, 90vw);
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.feynman-app .modal-title {
+  margin: 0 0 16px;
+  font-family: 'Newsreader', serif;
+  font-size: 20px;
+  color: var(--deep-text);
+}
+
+.feynman-app .modal-close {
+  float: right;
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: var(--content-meta);
+  cursor: pointer;
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  line-height: 1;
+}
+
+.feynman-app .modal-close:hover {
+  color: var(--rust);
+}
+
+/* ===== 帮助系统 ===== */
+.feynman-app .help-section {
+  margin-bottom: 24px;
+}
+
+.feynman-app .help-section h4 {
+  font-family: 'Newsreader', serif;
+  font-size: 16px;
+  margin: 0 0 12px;
+  color: var(--primary);
+}
+
+.feynman-app .help-section p {
+  font-size: 13px;
+  line-height: 1.65;
+  margin: 0 0 10px;
+  color: var(--deep-text);
+}
+
+.feynman-app .help-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.feynman-app .help-list li {
+  font-size: 13px;
+  line-height: 1.65;
+  margin-bottom: 8px;
+  padding-left: 20px;
+  position: relative;
+}
+
+.feynman-app .help-list li:before {
+  content: '•';
+  position: absolute;
+  left: 0;
+  color: var(--primary);
+  font-weight: bold;
+}
+
+.feynman-app .help-kbd {
+  display: inline-block;
+  background: var(--btn-regular-bg);
+  border: 1px solid var(--line-divider);
+  border-radius: var(--radius-sm);
+  padding: 2px 6px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  margin: 0 2px;
+  color: var(--deep-text);
+}
+
+.feynman-app .help-tip {
+  background: var(--blue-soft);
+  border-left: 3px solid var(--primary);
+  padding: 12px;
+  border-radius: var(--radius-sm);
+  margin: 12px 0;
+  font-size: 12.5px;
+  line-height: 1.6;
+}
+
+.feynman-app .help-warning {
+  background: rgba(156,86,66,0.1);
+  border-left: 3px solid var(--rust);
+  padding: 12px;
+  border-radius: var(--radius-sm);
+  margin: 12px 0;
+  font-size: 12.5px;
+  line-height: 1.6;
+}
+
+.feynman-app .help-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+  border-bottom: 2px solid var(--line-divider);
+}
+
+.feynman-app .help-tab {
+  padding: 8px 16px;
+  background: none;
+  border: none;
+  font-size: 13px;
+  cursor: pointer;
+  color: var(--content-meta);
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  transition: all var(--duration-normal);
+}
+
+.feynman-app .help-tab.active {
+  color: var(--primary);
+  border-bottom-color: var(--primary);
+  font-weight: 500;
+}
+
+.feynman-app .help-tab:hover {
+  color: var(--primary);
+}
+
+.feynman-app .help-content {
+  display: none;
+}
+
+.feynman-app .help-content.active {
+  display: block;
+}
+
+/* ===== 欢迎引导 ===== */
+.feynman-app .welcome-card {
+  background: linear-gradient(135deg, var(--blue-soft) 0%, var(--sage-soft) 100%);
+  border: 2px solid var(--primary);
+  border-radius: var(--radius-xl);
+  padding: 24px;
+  margin-bottom: 20px;
+}
+
+.feynman-app .welcome-title {
+  font-family: 'Newsreader', serif;
+  font-size: 22px;
+  margin: 0 0 12px;
+  color: var(--primary);
+}
+
+.feynman-app .welcome-steps {
+  display: grid;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.feynman-app .welcome-step {
+  background: var(--card-bg);
+  border-radius: var(--radius-md);
+  padding: 12px;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.feynman-app .welcome-step-num {
+  background: var(--primary);
+  color: white;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.feynman-app .welcome-step-content {
+  flex: 1;
+}
+
+.feynman-app .welcome-step-title {
+  font-weight: 500;
+  font-size: 13.5px;
+  margin-bottom: 4px;
+  color: var(--deep-text);
+}
+
+.feynman-app .welcome-step-desc {
+  font-size: 12px;
+  color: var(--content-meta);
+  line-height: 1.5;
+}
+
+.feynman-app .welcome-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 16px;
+  flex-wrap: wrap;
+}
+
+/* ===== 加载状态 ===== */
+.feynman-app .loading-state {
+  padding: 40px 0;
+  text-align: center;
+  color: var(--content-meta);
+  font-size: 13px;
+}
+
+/* ===== 页脚 ===== */
+.feynman-app .footer-note {
+  margin-top: 24px;
+  font-size: 11px;
+  color: var(--content-meta);
+  text-align: center;
+  padding: 16px;
+  border-top: 1px dashed var(--line-divider);
+}
+
+/* ===== 搜索框高亮 ===== */
+.feynman-app mark {
+  background: #FFE066;
+  padding: 1px 2px;
+  border-radius: 2px;
+}
+
+:root.dark .feynman-app mark {
+  background: rgba(255, 224, 102, 0.3);
+  color: var(--deep-text);
+}
+
+/* ===== 响应式优化 ===== */
+@media (max-width: 480px) {
+  .feynman-app h1 {
+    font-size: 24px;
+  }
+  
+  .feynman-app .welcome-card {
+    padding: 16px;
+  }
+  
+  .feynman-app .welcome-steps {
+    grid-template-columns: 1fr;
+  }
+  
+  .feynman-app .panel {
+    padding: 16px;
+  }
+  
+  .feynman-app .modal-content {
+    padding: 20px;
+  }
+}

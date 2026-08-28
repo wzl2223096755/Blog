@@ -88,6 +88,9 @@ export const ja: Translation = {
 	[Key.license]: "ライセンス",
 	[Key.bangumi]: "バングミ",
 
+	// ファインマン学習カード
+	[Key.feynman]: "ファインマン学習カード",
+
 	// バングミフィルターと状態文本
 	[Key.bangumiTitle]: "私のバングミ",
 	[Key.bangumiSubtitle]: "私の二次元の旅を記録する",

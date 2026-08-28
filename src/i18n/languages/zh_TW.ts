@@ -86,6 +86,9 @@ export const zh_TW: Translation = {
 	[Key.license]: "許可協議",
 	[Key.bangumi]: "番組計劃",
 
+	// 費曼學習卡
+	[Key.feynman]: "費曼學習卡",
+
 	// 番組計劃
 	[Key.bangumiTitle]: "我的番組計劃",
 	[Key.bangumiSubtitle]: "記錄我的二次元之旅",

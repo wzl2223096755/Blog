@@ -1,0 +1,25 @@
+---
+import MainGridLayout from "@/layouts/MainGridLayout.astro";
+
+const pageTitle = "费曼学习卡 · 习惯记录本";
+const pageDescription = "基于费曼学习法和间隔重复算法的学习工具，帮助你更好地理解和记忆知识。";
+---
+
+<MainGridLayout title={pageTitle} description={pageDescription}>
+  <div class="feynman-app card-base px-9 py-6 rounded-(--radius-large)">
+    <div class="wrap">
+      <header>
+        <div class="eyebrow">Study Log · Habit Grid</div>
+        <h1>费曼学习卡 · 习惯记录本</h1>
+        <p class="sub">学一个概念，就用自己的话讲一遍；讲不清楚的地方，回去补；补完再简化一次。习惯自己定义、每天打卡；下面的计划表用来安排每周固定的时间块，内容都自己填。</p>
+      </header>
+      <div id="app" class="loading-state">正在加载数据…</div>
+    </div>
+  </div>
+</MainGridLayout>
+
+<style>
+  @import "../styles/feynman.css";
+</style>
+
+<script is:inline src="/feynman-app.js"></script>

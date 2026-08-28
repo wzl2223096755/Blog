@@ -88,6 +88,9 @@ export const en: Translation = {
 	[Key.license]: "License",
 	[Key.bangumi]: "Bangumi",
 
+	// Feynman Cards
+	[Key.feynman]: "Feynman Cards",
+
 	// Bangumi Filter and Status Text
 	[Key.bangumiTitle]: "My Bangumi",
 	[Key.bangumiSubtitle]: "Record my ACG journey",

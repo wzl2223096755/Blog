@@ -88,6 +88,9 @@ export const ru: Translation = {
 	[Key.license]: "Лицензия",
 	[Key.bangumi]: "Бангуми",
 
+	// Карточки Фейнмана
+	[Key.feynman]: "Карточки Фейнмана",
+
 	// Фильтр и статус Бангуми текст
 	[Key.bangumiTitle]: "Мой план группы",
 	[Key.bangumiSubtitle]: "Запись моего аниме путешествия",
