@@ -18,21 +18,20 @@ const pageDescription = "基于费曼学习法和间隔重复算法的学习工�
 
   .feynman-fullwidth {
     /* 突破博客容器限制，扩展到全宽 */
-    width: 100vw;
+    width: 100%;
+    max-width: 100vw;
     position: relative;
-    left: 50%;
-    right: 50%;
-    margin-left: -50vw;
-    margin-right: -50vw;
-    margin-top: -2rem;
-    margin-bottom: -2rem;
-    padding: 2rem 1rem;
+    left: 0;
+    right: 0;
+    margin: -2rem 0;
+    padding: 3rem 5vw;
     background-color: #F3F1EA;
     background-image:
       linear-gradient(rgba(47, 76, 116, 0.09) 1px, transparent 1px),
       linear-gradient(90deg, rgba(47, 76, 116, 0.09) 1px, transparent 1px);
     background-size: 28px 28px;
     min-height: calc(100vh - 200px);
+    box-sizing: border-box;
   }
 
   @media (prefers-color-scheme: dark) {
@@ -127,17 +126,10 @@ const pageDescription = "基于费曼学习法和间隔重复算法的学习工�
   }
 
   #app .layout {
-    display: grid;
-    grid-template-columns: 1.4fr 1fr;
+    display: flex;
+    flex-direction: column;
     gap: 24px;
-    align-items: start;
     margin-bottom: 24px;
-  }
-
-  @media (max-width: 900px) {
-    #app .layout {
-      grid-template-columns: 1fr;
-    }
   }
 
   #app .panel {
@@ -426,12 +418,12 @@ const pageDescription = "基于费曼学习法和间隔重复算法的学习工�
   /* 响应式优化 */
   @media (max-width: 768px) {
     .feynman-fullwidth {
-      padding: 1.5rem 0.5rem;
-      margin-top: -1rem;
+      padding: 2rem 3vw;
+      margin: -1rem 0;
     }
 
     #app {
-      padding: 0 12px;
+      padding: 0 8px;
     }
 
     #app h1 {
