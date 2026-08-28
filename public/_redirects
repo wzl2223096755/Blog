@@ -1,0 +1,5 @@
+# Cloudflare Pages redirects
+# 确保所有路径都能正确路由
+
+# 404 页面
+/* /404.html 404
