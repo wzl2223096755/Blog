@@ -6,27 +6,446 @@ const pageDescription = "基于费曼学习法和间隔重复算法的学习工�
 ---
 
 <MainGridLayout title={pageTitle} description={pageDescription}>
-  <div class="feynman-page-container">
+  <!-- 使用博客框架，但扩展内容区域 -->
+  <div class="feynman-fullwidth">
     <div id="app" class="loading-state">正在加载数据…</div>
   </div>
 </MainGridLayout>
 
 <style is:global>
-  @import "../styles/feynman.css";
-</style>
+  /* 费曼应用全局样式 - 完全独立，不受博客主题影响 */
+  @import url('https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,500;0,600;1,400;1,500&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
 
-<style>
-  .feynman-page-container {
-    /* 扩展到全宽，覆盖博客默认容器样式 */
-    margin: -2.5rem -2.5rem 0;
-    padding: 0;
-    min-height: 600px;
+  .feynman-fullwidth {
+    /* 突破博客容器限制，扩展到全宽 */
+    width: 100vw;
+    position: relative;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+    margin-top: -2rem;
+    margin-bottom: -2rem;
+    padding: 2rem 1rem;
+    background-color: #F3F1EA;
+    background-image:
+      linear-gradient(rgba(47, 76, 116, 0.09) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(47, 76, 116, 0.09) 1px, transparent 1px);
+    background-size: 28px 28px;
+    min-height: calc(100vh - 200px);
   }
-  
-  @media (max-width: 768px) {
-    .feynman-page-container {
-      margin: -1.5rem -1.5rem 0;
+
+  @media (prefers-color-scheme: dark) {
+    .feynman-fullwidth {
+      background-color: #1a1a1a;
+      background-image:
+        linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
     }
+  }
+
+  /* 费曼应用内部的所有样式 */
+  #app {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  /* CSS 变量定义 */
+  .feynman-fullwidth {
+    --f-paper: #F3F1EA;
+    --f-grid: rgba(47, 76, 116, 0.09);
+    --f-card: #FFFDF8;
+    --f-ink: #23262B;
+    --f-ink-soft: #5B5B54;
+    --f-blue: #2F4C74;
+    --f-blue-soft: rgba(47,76,116,0.10);
+    --f-sage: #5C7A57;
+    --f-sage-soft: rgba(92,122,87,0.14);
+    --f-rust: #9C5642;
+    --f-border: #DCD8C9;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .feynman-fullwidth {
+      --f-paper: #1a1a1a;
+      --f-grid: rgba(255, 255, 255, 0.05);
+      --f-card: #242424;
+      --f-ink: #e8e8e8;
+      --f-ink-soft: #a8a8a8;
+      --f-blue: #5B7FA3;
+      --f-blue-soft: rgba(91,127,163,0.15);
+      --f-sage: #7B9A76;
+      --f-sage-soft: rgba(123,154,118,0.20);
+      --f-rust: #B67662;
+      --f-border: #3a3a3a;
+    }
+  }
+
+  /* 重置博客主题对费曼内容的影响 */
+  #app * {
+    font-family: 'IBM Plex Sans', sans-serif;
+  }
+
+  #app .wrap {
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  #app header {
+    margin-bottom: 28px;
+    padding-top: 20px;
+  }
+
+  #app .eyebrow {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11.5px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--f-blue);
+    margin-bottom: 6px;
+    font-weight: 500;
+  }
+
+  #app h1 {
+    font-family: 'Newsreader', serif;
+    font-style: italic;
+    font-weight: 500;
+    font-size: 32px;
+    margin: 0 0 12px;
+    color: var(--f-ink);
+    line-height: 1.2;
+  }
+
+  #app .sub {
+    font-size: 14px;
+    color: var(--f-ink-soft);
+    max-width: 680px;
+    line-height: 1.7;
+    margin: 0;
+  }
+
+  #app .layout {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 24px;
+    align-items: start;
+    margin-bottom: 24px;
+  }
+
+  @media (max-width: 900px) {
+    #app .layout {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  #app .panel {
+    background: var(--f-card);
+    border: 1px solid var(--f-border);
+    border-radius: 8px;
+    padding: 24px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    transition: box-shadow 0.2s ease;
+  }
+
+  #app .panel:hover {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  }
+
+  #app .panel-title {
+    font-family: 'Newsreader', serif;
+    font-size: 20px;
+    font-weight: 600;
+    margin: 0 0 6px;
+    color: var(--f-ink);
+  }
+
+  #app .panel-hint {
+    font-size: 13px;
+    color: var(--f-ink-soft);
+    margin: 0 0 18px;
+    line-height: 1.6;
+  }
+
+  #app button {
+    font-family: 'IBM Plex Sans', sans-serif;
+    cursor: pointer;
+    border-radius: 6px;
+    border: 1px solid transparent;
+    transition: all 0.2s ease;
+    font-size: 14px;
+  }
+
+  #app .btn-primary {
+    background: var(--f-blue);
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    font-weight: 500;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  #app .btn-primary:hover {
+    background: #26405E;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    transform: translateY(-1px);
+  }
+
+  #app .btn-text {
+    background: none;
+    border: none;
+    color: var(--f-ink-soft);
+    font-size: 13px;
+    padding: 6px 10px;
+    text-decoration: none;
+  }
+
+  #app .btn-text:hover {
+    color: var(--f-ink);
+    background: var(--f-blue-soft);
+    border-radius: 4px;
+  }
+
+  #app .btn-text.danger {
+    color: var(--f-rust);
+  }
+
+  #app input[type="text"],
+  #app input[type="number"],
+  #app textarea,
+  #app select {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 14px;
+    padding: 10px 14px;
+    border: 1px solid var(--f-border);
+    border-radius: 6px;
+    background: var(--f-card);
+    color: var(--f-ink);
+    width: 100%;
+    transition: all 0.2s ease;
+  }
+
+  #app input:focus,
+  #app textarea:focus,
+  #app select:focus {
+    outline: none;
+    border-color: var(--f-blue);
+    box-shadow: 0 0 0 3px var(--f-blue-soft);
+  }
+
+  #app textarea {
+    resize: vertical;
+    min-height: 80px;
+    line-height: 1.6;
+  }
+
+  #app label.field-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.03em;
+    color: var(--f-blue);
+    display: block;
+    margin: 14px 0 6px;
+    font-weight: 500;
+  }
+
+  #app .fcard {
+    position: relative;
+    border: 1px solid var(--f-border);
+    border-radius: 6px;
+    background: var(--f-card);
+    padding: 16px 20px;
+    margin-bottom: 12px;
+    transition: all 0.2s ease;
+  }
+
+  #app .fcard:hover {
+    border-color: var(--f-blue);
+    box-shadow: 0 2px 8px rgba(47, 76, 116, 0.1);
+  }
+
+  #app .fcard::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 12px;
+    bottom: 12px;
+    width: 4px;
+    background: var(--f-blue-soft);
+    border-radius: 0 2px 2px 0;
+  }
+
+  #app .fcard.due::before {
+    background: var(--f-rust);
+  }
+
+  #app .fcard-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    cursor: pointer;
+    gap: 12px;
+    margin-left: 12px;
+  }
+
+  #app .fcard-topic {
+    font-family: 'Newsreader', serif;
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--f-ink);
+  }
+
+  #app .subject-tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--f-blue);
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+  }
+
+  #app .check-box {
+    width: 28px;
+    height: 28px;
+    border: 2px solid var(--f-border);
+    border-radius: 6px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    background: var(--f-card);
+    font-size: 16px;
+    color: var(--f-sage);
+    transition: all 0.2s ease;
+  }
+
+  #app .check-box:hover {
+    border-color: var(--f-sage);
+    transform: scale(1.05);
+  }
+
+  #app .check-box.checked {
+    background: var(--f-sage);
+    border-color: var(--f-sage);
+    color: white;
+  }
+
+  #app .habit-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 6px;
+    font-size: 13px;
+  }
+
+  #app .habit-table th {
+    font-family: 'IBM Plex Mono', monospace;
+    font-weight: 500;
+    color: var(--f-ink-soft);
+    font-size: 11px;
+    padding: 8px 4px;
+    text-align: center;
+  }
+
+  #app .habit-table td {
+    padding: 8px;
+    text-align: center;
+    background: var(--f-card);
+  }
+
+  #app .habit-table tr td:first-child {
+    border-radius: 6px 0 0 6px;
+    text-align: left;
+    padding-left: 12px;
+  }
+
+  #app .habit-table tr td:last-child {
+    border-radius: 0 6px 6px 0;
+  }
+
+  #app .loading-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--f-ink-soft);
+    font-style: italic;
+    font-size: 14px;
+  }
+
+  #app .empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--f-ink-soft);
+    background: var(--f-card);
+    border: 2px dashed var(--f-border);
+    border-radius: 8px;
+    margin: 16px 0;
+  }
+
+  #app .badge {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+  }
+
+  #app .badge-due {
+    background: var(--f-rust);
+    color: white;
+  }
+
+  #app .badge-new {
+    background: var(--f-blue-soft);
+    color: var(--f-blue);
+  }
+
+  #app .due-badge {
+    display: inline-block;
+    background: var(--f-rust);
+    color: #fff;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    padding: 3px 10px;
+    border-radius: 12px;
+    margin-left: 8px;
+  }
+
+  #app .new-badge {
+    display: inline-block;
+    background: var(--f-blue-soft);
+    color: var(--f-blue);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    padding: 3px 10px;
+    border-radius: 12px;
+    margin-left: 8px;
+  }
+
+  /* 响应式优化 */
+  @media (max-width: 768px) {
+    .feynman-fullwidth {
+      padding: 1.5rem 0.5rem;
+      margin-top: -1rem;
+    }
+
+    #app {
+      padding: 0 12px;
+    }
+
+    #app h1 {
+      font-size: 26px;
+    }
+
+    #app .panel {
+      padding: 20px;
+    }
+  }
+
+  /* 确保不被博客的侧边栏或其他元素遮挡 */
+  .feynman-fullwidth {
+    z-index: 1;
   }
 </style>
 
