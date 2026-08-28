@@ -1,5 +1,15 @@
-# Cloudflare Pages redirects
-# 确保所有路径都能正确路由
-
-# 404 页面
-/* /404.html 404
+# Cloudflare Pages redirects for trailing slash handling
+# Redirect paths without trailing slash to with trailing slash
+/about /about/ 301
+/feynman /feynman/ 301
+/archive /archive/ 301
+/friends /friends/ 301
+/guestbook /guestbook/ 301
+/gallery /gallery/ 301
+/bangumi /bangumi/ 301
+/tags /tags/ 301
+/categories /categories/ 301
+/posts/* /posts/:splat/ 301
+/rss /rss/ 301
+/search /search/ 301
+/sponsor /sponsor/ 301
