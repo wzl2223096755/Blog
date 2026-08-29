@@ -65,759 +65,308 @@ const pageDescription = "基于费曼学习法和间隔重复算法的学习工�
 </MainGridLayout>
 
 <style is:global>
-  /* 费曼应用全局样式 - 完全独立，不受博客主题影响 */
   @import url('https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,500;0,600;1,400;1,500&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
 
+  /* ===== 背景容器 + CSS 变量（与原始 HTML 完全一致，供 JS 模板 inline style 使用）===== */
   .feynman-fullwidth {
-    /* 突破博客容器限制，扩展到全宽 */
     width: 100%;
     max-width: 100vw;
     position: relative;
-    left: 0;
-    right: 0;
     margin: -2rem 0;
     padding: 3rem 5vw;
     background-color: #F3F1EA;
     background-image:
-      linear-gradient(rgba(47, 76, 116, 0.09) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(47, 76, 116, 0.09) 1px, transparent 1px);
+      linear-gradient(rgba(47,76,116,0.09) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(47,76,116,0.09) 1px, transparent 1px);
     background-size: 28px 28px;
     min-height: calc(100vh - 200px);
     box-sizing: border-box;
+    --paper: #F3F1EA;
+    --card: #FFFDF8;
+    --ink: #23262B;
+    --ink-soft: #5B5B54;
+    --blue: #2F4C74;
+    --blue-soft: rgba(47,76,116,0.10);
+    --sage: #5C7A57;
+    --sage-soft: rgba(92,122,87,0.14);
+    --rust: #9C5642;
+    --border: #DCD8C9;
   }
 
   @media (prefers-color-scheme: dark) {
     .feynman-fullwidth {
       background-color: #1a1a1a;
       background-image:
-        linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+        linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
+      --paper: #1a1a1a;
+      --card: #242424;
+      --ink: #e8e8e8;
+      --ink-soft: #a0a0a0;
+      --blue: #5B7FA3;
+      --blue-soft: rgba(91,127,163,0.15);
+      --sage: #7B9A76;
+      --sage-soft: rgba(123,154,118,0.20);
+      --rust: #B67662;
+      --border: #3a3a3a;
     }
   }
 
-  /* 费曼应用内部的所有样式 */
+  /* ===== #app 容器 ===== */
   #app {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 20px;
-  }
-
-  /* CSS 变量定义 */
-  .feynman-fullwidth {
-    --f-paper: #F3F1EA;
-    --f-grid: rgba(47, 76, 116, 0.09);
-    --f-card: #FFFDF8;
-    --f-ink: #23262B;
-    --f-ink-soft: #5B5B54;
-    --f-blue: #2F4C74;
-    --f-blue-soft: rgba(47,76,116,0.10);
-    --f-sage: #5C7A57;
-    --f-sage-soft: rgba(92,122,87,0.14);
-    --f-rust: #9C5642;
-    --f-border: #DCD8C9;
-  }
-
-  @media (prefers-color-scheme: dark) {
-    .feynman-fullwidth {
-      --f-paper: #1a1a1a;
-      --f-grid: rgba(255, 255, 255, 0.05);
-      --f-card: #242424;
-      --f-ink: #e8e8e8;
-      --f-ink-soft: #a8a8a8;
-      --f-blue: #5B7FA3;
-      --f-blue-soft: rgba(91,127,163,0.15);
-      --f-sage: #7B9A76;
-      --f-sage-soft: rgba(123,154,118,0.20);
-      --f-rust: #B67662;
-      --f-border: #3a3a3a;
-    }
-  }
-
-  /* 重置博客主题对费曼内容的影响 */
-  #app * {
-    font-family: 'IBM Plex Sans', sans-serif;
-  }
-
-  #app .wrap {
-    max-width: 100%;
-    margin: 0;
     padding: 0;
+    font-family: 'IBM Plex Sans', sans-serif;
+    color: var(--ink);
   }
+  #app * { box-sizing: border-box; }
 
-  #app header {
-    margin-bottom: 28px;
-    padding-top: 20px;
-  }
-
-  #app .eyebrow {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 11.5px;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--f-blue);
-    margin-bottom: 6px;
-    font-weight: 500;
-  }
-
-  #app h1 {
-    font-family: 'Newsreader', serif;
-    font-style: italic;
-    font-weight: 500;
-    font-size: 32px;
-    margin: 0 0 12px;
-    color: var(--f-ink);
-    line-height: 1.2;
-  }
-
-  #app .sub {
-    font-size: 14px;
-    color: var(--f-ink-soft);
-    max-width: 680px;
-    line-height: 1.7;
-    margin: 0;
-  }
-
-  /* 外层布局：费曼panel(大) + 习惯panel(小) */
+  /* ===== 布局 ===== */
   #app .layout {
     display: grid;
     grid-template-columns: 2fr 1fr;
-    gap: 20px;
+    gap: 22px;
     align-items: start;
-    margin-bottom: 20px;
+    margin-bottom: 22px;
   }
 
-  /* 费曼panel内部：新建表单(左) | 卡片列表+盲点清单(右) */
+  /* 费曼 panel 内部：新建表单(左) | 卡片列表+盲点清单(右) */
   #app #feynman-panel {
     display: grid;
     grid-template-columns: 360px 1fr;
     gap: 0 20px;
     align-items: start;
   }
-
-  /* 跨两列的元素：标题、提示、搜索框、筛选器 */
   #app #feynman-panel > .panel-title,
   #app #feynman-panel > .panel-hint,
   #app #feynman-panel > .search-bar,
-  #app #feynman-panel > .subject-filter {
-    grid-column: 1 / -1;
-    margin-bottom: 12px;
-  }
+  #app #feynman-panel > .subject-filter { grid-column: 1 / -1; }
+  #app .new-card-form { grid-column: 1; position: sticky; top: 80px; }
+  #app #fcard-list { grid-column: 2; }
+  #app .gap-bank { grid-column: 2; }
 
-  #app #feynman-panel > .search-bar {
-    margin-bottom: 0;
-  }
-
-  /* 新建表单：左列，粘性定位跟随滚动 */
-  #app .new-card-form {
-    grid-column: 1;
-    position: sticky;
-    top: 80px;
-    margin-bottom: 0;
-  }
-
-  /* 搜索栏样式 */
-  #app .search-bar {
-    margin-bottom: 8px;
-  }
-
-  /* 卡片列表：右列 */
-  #app #fcard-list {
-    grid-column: 2;
-  }
-
-  /* 盲点清单：右列，卡片列表下方 */
-  #app .gap-bank {
-    grid-column: 2;
-  }
-
-  /* 窄屏：费曼panel内部变单列 */
   @media (max-width: 1280px) {
-    #app #feynman-panel {
-      grid-template-columns: 1fr;
-    }
+    #app #feynman-panel { grid-template-columns: 1fr; }
     #app #feynman-panel > .panel-title,
     #app #feynman-panel > .panel-hint,
     #app #feynman-panel > .search-bar,
     #app #feynman-panel > .subject-filter,
     #app .new-card-form,
     #app #fcard-list,
-    #app .gap-bank {
-      grid-column: 1;
-    }
-    #app .new-card-form {
-      position: static;
-    }
+    #app .gap-bank { grid-column: 1; }
+    #app .new-card-form { position: static; }
   }
-
-  /* 更窄屏：外层也变单列 */
   @media (max-width: 900px) {
-    #app .layout {
-      grid-template-columns: 1fr;
-    }
+    #app .layout { grid-template-columns: 1fr; }
   }
 
-  #app .panel {
-    background: var(--f-card);
-    border: 1px solid var(--f-border);
-    border-radius: 8px;
-    padding: 24px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-    transition: box-shadow 0.2s ease;
-  }
+  /* ===== Panel ===== */
+  #app .panel { background: var(--card); border: 1px solid var(--border); border-radius: 4px; padding: 20px; }
+  #app .panel-title { font-family: 'Newsreader', serif; font-size: 18px; font-weight: 600; margin: 0 0 4px; color: var(--ink); }
+  #app .panel-hint { font-size: 12.5px; color: var(--ink-soft); margin: 0 0 16px; line-height: 1.5; }
 
-  #app .panel:hover {
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
-  }
+  /* ===== 按钮 ===== */
+  #app button { font-family: 'IBM Plex Sans', sans-serif; cursor: pointer; border-radius: 3px; border: 1px solid transparent; }
+  #app .btn-primary { background: var(--blue); color: #fff; border: none; padding: 9px 16px; font-size: 13.5px; font-weight: 500; }
+  #app .btn-primary:hover { background: #26405E; }
+  #app .btn-text { background: none; border: none; color: var(--ink-soft); font-size: 12px; padding: 4px 2px; text-decoration: underline; cursor: pointer; }
+  #app .btn-text.danger { color: var(--rust); }
 
-  #app .panel-title {
-    font-family: 'Newsreader', serif;
-    font-size: 20px;
-    font-weight: 600;
-    margin: 0 0 6px;
-    color: var(--f-ink);
-  }
-
-  #app .panel-hint {
-    font-size: 13px;
-    color: var(--f-ink-soft);
-    margin: 0 0 18px;
-    line-height: 1.6;
-  }
-
-  #app button {
-    font-family: 'IBM Plex Sans', sans-serif;
-    cursor: pointer;
-    border-radius: 6px;
-    border: 1px solid transparent;
-    transition: all 0.2s ease;
-    font-size: 14px;
-  }
-
-  #app .btn-primary {
-    background: var(--f-blue);
-    color: #fff;
-    border: none;
-    padding: 10px 20px;
-    font-weight: 500;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-
-  #app .btn-primary:hover {
-    background: #26405E;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-    transform: translateY(-1px);
-  }
-
-  #app .btn-text {
-    background: none;
-    border: none;
-    color: var(--f-ink-soft);
-    font-size: 13px;
-    padding: 6px 10px;
-    text-decoration: none;
-  }
-
-  #app .btn-text:hover {
-    color: var(--f-ink);
-    background: var(--f-blue-soft);
-    border-radius: 4px;
-  }
-
-  #app .btn-text.danger {
-    color: var(--f-rust);
-  }
-
-  #app input[type="text"],
-  #app input[type="number"],
+  /* ===== 输入框 ===== */
+  #app input[type=text],
+  #app input[type=password],
+  #app input[type=number],
   #app textarea,
   #app select {
+    width: 100%;
     font-family: 'IBM Plex Sans', sans-serif;
-    font-size: 14px;
-    padding: 10px 14px;
-    border: 1px solid var(--f-border);
-    border-radius: 6px;
-    background: var(--f-card);
-    color: var(--f-ink);
-    width: 100%;
-    transition: all 0.2s ease;
+    font-size: 13.5px;
+    padding: 8px 10px;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    background: var(--card);
+    color: var(--ink);
+    box-sizing: border-box;
   }
-
-  #app input:focus,
-  #app textarea:focus,
-  #app select:focus {
-    outline: none;
-    border-color: var(--f-blue);
-    box-shadow: 0 0 0 3px var(--f-blue-soft);
-  }
-
-  #app textarea {
-    resize: vertical;
-    min-height: 80px;
-    line-height: 1.6;
-  }
-
-  #app label.field-label {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 11px;
-    letter-spacing: 0.03em;
-    color: var(--f-blue);
-    display: block;
-    margin: 14px 0 6px;
-    font-weight: 500;
-  }
-
-  #app .fcard {
-    position: relative;
-    border: 1px solid var(--f-border);
-    border-radius: 6px;
-    background: var(--f-card);
-    padding: 16px 20px;
-    margin-bottom: 12px;
-    transition: all 0.2s ease;
-  }
-
-  #app .fcard:hover {
-    border-color: var(--f-blue);
-    box-shadow: 0 2px 8px rgba(47, 76, 116, 0.1);
-  }
-
-  #app .fcard::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 12px;
-    bottom: 12px;
-    width: 4px;
-    background: var(--f-blue-soft);
-    border-radius: 0 2px 2px 0;
-  }
-
-  #app .fcard.due::before {
-    background: var(--f-rust);
-  }
-
-  #app .fcard-head {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    cursor: pointer;
-    gap: 12px;
-    margin-left: 12px;
-  }
-
-  #app .fcard-topic {
-    font-family: 'Newsreader', serif;
-    font-size: 16px;
-    font-weight: 500;
-    color: var(--f-ink);
-  }
-
-  #app .subject-tag {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 10px;
-    color: var(--f-blue);
-    letter-spacing: 0.02em;
-    text-transform: uppercase;
-  }
-
-  #app .check-box {
-    width: 28px;
-    height: 28px;
-    border: 2px solid var(--f-border);
-    border-radius: 6px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    background: var(--f-card);
-    font-size: 16px;
-    color: var(--f-sage);
-    transition: all 0.2s ease;
-  }
-
-  #app .check-box:hover {
-    border-color: var(--f-sage);
-    transform: scale(1.05);
-  }
-
-  #app .check-box.checked {
-    background: var(--f-sage);
-    border-color: var(--f-sage);
-    color: white;
-  }
-
-  #app .habit-table {
-    width: 100%;
-    border-collapse: separate;
-    border-spacing: 0 6px;
-    font-size: 13px;
-  }
-
-  #app .habit-table th {
-    font-family: 'IBM Plex Mono', monospace;
-    font-weight: 500;
-    color: var(--f-ink-soft);
-    font-size: 11px;
-    padding: 8px 4px;
-    text-align: center;
-  }
-
-  #app .habit-table td {
-    padding: 8px;
-    text-align: center;
-    background: var(--f-card);
-  }
-
-  #app .habit-table tr td:first-child {
-    border-radius: 6px 0 0 6px;
-    text-align: left;
-    padding-left: 12px;
-  }
-
-  #app .habit-table tr td:last-child {
-    border-radius: 0 6px 6px 0;
-  }
-
-  #app .loading-state {
-    text-align: center;
-    padding: 60px 20px;
-    color: var(--f-ink-soft);
-    font-style: italic;
-    font-size: 14px;
-  }
-
-  #app .empty-state {
-    text-align: center;
-    padding: 40px 20px;
-    color: var(--f-ink-soft);
-    background: var(--f-card);
-    border: 2px dashed var(--f-border);
-    border-radius: 8px;
-    margin: 16px 0;
-  }
-
-  #app .badge {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 10px;
-    padding: 3px 8px;
-    border-radius: 4px;
-    font-weight: 500;
-    letter-spacing: 0.02em;
-  }
-
-  #app .badge-due {
-    background: var(--f-rust);
-    color: white;
-  }
-
-  #app .badge-new {
-    background: var(--f-blue-soft);
-    color: var(--f-blue);
-  }
-
-  #app .due-badge {
-    display: inline-block;
-    background: var(--f-rust);
-    color: #fff;
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 11px;
-    font-weight: 500;
-    padding: 3px 10px;
-    border-radius: 12px;
-    margin-left: 8px;
-  }
-
-  #app .new-badge {
-    display: inline-block;
-    background: var(--f-blue-soft);
-    color: var(--f-blue);
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 11px;
-    font-weight: 500;
-    padding: 3px 10px;
-    border-radius: 12px;
-    margin-left: 8px;
-  }
-
-  /* 响应式优化 */
-  @media (max-width: 768px) {
-    .feynman-fullwidth {
-      padding: 2rem 3vw;
-      margin: -1rem 0;
-    }
-
-    #app {
-      padding: 0 8px;
-    }
-
-    #app h1 {
-      font-size: 26px;
-    }
-
-    #app .panel {
-      padding: 20px;
-    }
-  }
-
-  /* 确保不被博客的侧边栏或其他元素遮挡 */
-  .feynman-fullwidth {
-    z-index: 1;
-  }
-
-  /* ========== 云端同步UI样式 ========== */
-  .cloud-sync-bar {
-    position: fixed;
-    top: 80px;
-    right: 20px;
-    z-index: 1000;
-    background: var(--f-card);
-    border: 1px solid var(--f-border);
-    border-radius: 8px;
-    padding: 8px 12px;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
-  }
-
-  .sync-controls {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-
-  .sync-btn {
-    background: none;
-    border: none;
-    color: var(--f-ink-soft);
-    padding: 8px;
-    cursor: pointer;
-    border-radius: 6px;
-    transition: all 0.2s;
-    display: flex;
-    align-items: center;
-  }
-
-  .sync-btn:hover {
-    background: var(--f-blue-soft);
-    color: var(--f-blue);
-  }
-
-  .sync-status {
-    font-size: 12px;
-    font-family: 'IBM Plex Mono', monospace;
-    color: var(--f-ink-soft);
-    min-width: 60px;
-  }
-
-  .sync-status.syncing {
-    color: var(--f-blue);
-    animation: pulse 1.5s ease-in-out infinite;
-  }
-
-  .sync-status.success {
-    color: var(--f-sage);
-  }
-
-  .sync-status.error {
-    color: var(--f-rust);
-  }
-
-  .sync-status.info {
-    color: var(--f-blue);
-  }
-
-  @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.5; }
-  }
-
-  /* 云端同步模态框 */
-  .sync-modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 2000;
-    backdrop-filter: blur(4px);
-  }
-
-  .sync-modal-content {
-    background: var(--f-card);
-    border: 1px solid var(--f-border);
-    border-radius: 12px;
-    padding: 32px;
-    max-width: 500px;
-    width: 90%;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-    position: relative;
-  }
-
-  .sync-modal-close {
-    position: absolute;
-    top: 16px;
-    right: 16px;
-    background: none;
-    border: none;
-    font-size: 28px;
-    color: var(--f-ink-soft);
-    cursor: pointer;
-    line-height: 1;
-    padding: 4px 8px;
-    border-radius: 4px;
-  }
-
-  .sync-modal-close:hover {
-    background: var(--f-blue-soft);
-    color: var(--f-ink);
-  }
-
-  .sync-modal-title {
-    font-family: 'Newsreader', serif;
-    font-size: 24px;
-    font-weight: 600;
-    margin: 0 0 20px;
-    color: var(--f-ink);
-  }
-
-  .sync-section {
-    margin-bottom: 20px;
-  }
-
-  .sync-hint {
-    font-size: 14px;
-    color: var(--f-ink-soft);
-    line-height: 1.6;
-    margin-bottom: 20px;
-  }
-
-  .sync-form-group {
-    margin-bottom: 20px;
-  }
-
-  .sync-form-group label {
-    display: block;
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 12px;
-    color: var(--f-blue);
-    margin-bottom: 8px;
-    font-weight: 500;
-  }
-
-  .sync-form-group input {
-    width: 100%;
-    padding: 12px 14px;
-    border: 1px solid var(--f-border);
-    border-radius: 6px;
-    font-size: 14px;
-    font-family: 'IBM Plex Mono', monospace;
-    background: var(--f-card);
-    color: var(--f-ink);
-  }
-
-  .sync-form-group input:focus {
-    outline: none;
-    border-color: var(--f-blue);
-    box-shadow: 0 0 0 3px var(--f-blue-soft);
-  }
-
-  .sync-form-group small {
-    display: block;
-    font-size: 12px;
-    color: var(--f-ink-soft);
-    margin-top: 6px;
-  }
-
-  .sync-actions {
-    display: flex;
-    gap: 12px;
-    margin-top: 20px;
-  }
-
-  .sync-primary-btn,
-  .sync-secondary-btn,
-  .sync-danger-btn {
-    flex: 1;
-    padding: 12px 20px;
-    border-radius: 6px;
-    font-size: 14px;
-    font-weight: 500;
-    cursor: pointer;
-    border: none;
-    transition: all 0.2s;
-  }
-
-  .sync-primary-btn {
-    background: var(--f-blue);
-    color: white;
-  }
-
-  .sync-primary-btn:hover {
-    background: #26405E;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(47, 76, 116, 0.3);
-  }
-
-  .sync-secondary-btn {
-    background: var(--f-blue-soft);
-    color: var(--f-blue);
-  }
-
-  .sync-secondary-btn:hover {
-    background: var(--f-blue);
-    color: white;
-  }
-
-  .sync-danger-btn {
-    background: transparent;
-    color: var(--f-rust);
-    border: 1px solid var(--f-rust);
-  }
-
-  .sync-danger-btn:hover {
-    background: var(--f-rust);
-    color: white;
-  }
-
-  .sync-info {
-    background: var(--f-sage-soft);
-    padding: 16px;
-    border-radius: 8px;
-    margin-bottom: 20px;
-  }
-
-  .sync-info p {
-    margin: 0 0 8px;
-    font-size: 14px;
-    color: var(--f-ink);
-  }
-
-  .sync-info p:last-child {
-    margin-bottom: 0;
-  }
-
-  .sync-last-sync {
-    font-size: 13px !important;
-    color: var(--f-ink-soft) !important;
-    font-family: 'IBM Plex Mono', monospace;
-  }
+  #app textarea { resize: vertical; min-height: 54px; line-height: 1.55; white-space: pre-wrap; }
+  #app input:focus, #app textarea:focus, #app select:focus { outline: none; border-color: var(--blue); box-shadow: 0 0 0 2px var(--blue-soft); }
+  #app label.field-label { font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; letter-spacing: 0.03em; color: var(--blue); display: block; margin: 12px 0 4px; }
+  #app label.field-label:first-child { margin-top: 0; }
+
+  /* ===== 新建卡片表单 ===== */
+  #app .new-card-form { margin-bottom: 18px; }
+  #app .form-title { font-family: 'Newsreader', serif; font-size: 15px; font-weight: 600; margin-bottom: 4px; color: var(--blue); }
+  #app .subject-row { display: flex; gap: 8px; }
+  #app .subject-row select { width: 150px; flex: 0 0 auto; font-size: 13px; padding: 8px 10px; border: 1px solid var(--border); border-radius: 3px; background: var(--card); color: var(--ink); }
+  #app .subject-row input { flex: 1; }
+  #app .form-actions { margin-top: 12px; display: flex; align-items: center; gap: 10px; }
+
+  /* ===== 科目筛选 ===== */
+  #app .subject-filter { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
+  #app .filter-chip { font-family: 'IBM Plex Mono', monospace; font-size: 11px; padding: 4px 10px; border: 1px solid var(--border); border-radius: 3px; background: var(--card); color: var(--ink-soft); cursor: pointer; }
+  #app .filter-chip:hover { border-color: var(--blue); color: var(--blue); }
+  #app .filter-chip.active { background: var(--blue); border-color: var(--blue); color: #fff; }
+  #app .search-bar { margin-bottom: 8px; }
+
+  /* ===== 费曼卡片 ===== */
+  #app .fcard-topic-wrap { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+  #app .subject-tag { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--blue); letter-spacing: 0.02em; }
+  #app .fcard { position: relative; border: 1px solid var(--border); border-radius: 2px; background: var(--card); padding: 13px 16px 13px 18px; margin-bottom: 10px; }
+  #app .fcard::before { content: ''; position: absolute; left: 0; top: 10px; bottom: 10px; width: 3px; background: var(--blue-soft); border-radius: 2px; }
+  #app .fcard.due { border-color: var(--rust); }
+  #app .fcard.due::before { background: var(--rust); }
+  #app .fcard.editing { border-color: var(--blue); box-shadow: 0 0 0 1px var(--blue); }
+  #app .fcard-head { display: flex; justify-content: space-between; align-items: baseline; cursor: pointer; gap: 10px; }
+  #app .fcard-topic { font-family: 'Newsreader', serif; font-size: 15.5px; font-weight: 500; color: var(--ink); }
+  #app .fcard-date { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--ink-soft); white-space: nowrap; }
+  #app .fcard-meta { display: flex; align-items: center; gap: 8px; white-space: nowrap; }
+  #app .fcard-body { margin-top: 10px; display: none; }
+  #app .fcard.open .fcard-body { display: block; }
+  #app .fcard-step { margin-bottom: 8px; font-size: 13px; line-height: 1.6; white-space: pre-wrap; }
+  #app .fcard-step .step-label { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--blue); display: block; margin-bottom: 2px; }
+  #app .fcard-actions { margin-top: 8px; }
+
+  /* ===== 复习按钮 ===== */
+  #app .review-row { margin-top: 10px; }
+  #app .review-btns { display: flex; gap: 6px; flex-wrap: wrap; }
+  #app .review-btn { font-size: 12px; padding: 5px 12px; border-radius: 3px; border: 1px solid var(--border); background: var(--card); color: var(--ink); }
+  #app .review-btn:hover { border-color: var(--blue); color: var(--blue); }
+  #app .review-btn.again:hover { border-color: var(--rust); color: var(--rust); }
+  #app .review-btn.good { border-color: var(--sage); color: var(--sage); }
+  #app .review-btn.easy { border-color: var(--blue); color: var(--blue); }
+
+  /* ===== 徽章 ===== */
+  #app .badge { font-family: 'IBM Plex Mono', monospace; font-size: 10px; padding: 1px 6px; border-radius: 3px; }
+  #app .badge-new { background: var(--blue-soft); color: var(--blue); }
+  #app .badge-learning { background: var(--sage-soft); color: var(--sage); }
+  #app .badge-relearn { background: var(--blue-soft); color: var(--rust); }
+  #app .badge-mastered { background: #EDEDE9; color: var(--ink-soft); }
+  #app .badge-due { background: var(--rust); color: #fff; }
+  #app .due-badge { display: inline-block; background: var(--rust); color: #fff; font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 400; letter-spacing: 0.02em; padding: 2px 7px; border-radius: 3px; vertical-align: middle; margin-left: 6px; }
+  #app .new-badge { display: inline-block; background: var(--blue-soft); color: var(--blue); font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 400; letter-spacing: 0.02em; padding: 2px 7px; border-radius: 3px; vertical-align: middle; margin-left: 6px; }
+
+  /* ===== 盲点清单 ===== */
+  #app .gap-bank { margin-top: 22px; border-top: 1px dashed var(--border); padding-top: 16px; }
+  #app .gap-bank-title { font-family: 'Newsreader', serif; font-size: 15px; font-weight: 600; margin-bottom: 10px; color: var(--ink); }
+  #app .gap-item { display: flex; gap: 8px; padding: 8px 10px; border: 1px solid var(--border); border-radius: 3px; margin-bottom: 8px; background: var(--card); }
+  #app .gap-item.done { opacity: 0.55; }
+  #app .gap-item.done .gap-text { text-decoration: line-through; }
+  #app .gap-check { cursor: pointer; font-size: 15px; color: var(--sage); line-height: 1.4; user-select: none; }
+  #app .gap-check:hover { color: var(--rust); }
+  #app .gap-text { font-size: 13px; line-height: 1.55; }
+  #app .gap-topic { font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; color: var(--blue); margin-bottom: 2px; }
+
+  /* ===== 习惯追踪 ===== */
+  #app .habit-add-row { display: flex; gap: 8px; margin-bottom: 16px; }
+  #app .week-nav { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--ink-soft); }
+  #app .week-nav button { background: none; border: none; color: var(--blue); font-size: 12.5px; padding: 2px 4px; cursor: pointer; }
+  #app .week-nav .btn-today { color: var(--rust); }
+  #app .habit-streak { font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; color: var(--rust); margin-top: 3px; }
+  #app table.habit-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  #app table.habit-table th, #app table.habit-table td { text-align: center; padding: 6px 2px; }
+  #app table.habit-table th { font-family: 'IBM Plex Mono', monospace; font-weight: 400; color: var(--ink-soft); font-size: 10px; }
+  #app table.habit-table td.habit-name-cell { text-align: left; font-size: 12px; padding-right: 4px; max-width: 84px; word-break: break-word; line-height: 1.3; }
+  #app th.is-today, #app td.is-today { background: var(--blue-soft); }
+  #app th.is-today { color: var(--blue); }
+  #app .check-box { width: 21px; height: 21px; border: 1px solid var(--border); border-radius: 3px; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; background: var(--card); font-size: 12px; color: var(--sage); user-select: none; }
+  #app .check-box.checked { background: var(--sage-soft); border-color: var(--sage); }
+  #app .habit-row-remove { background: none; border: none; color: var(--ink-soft); font-size: 12px; cursor: pointer; padding: 0 0 0 3px; }
+  #app .habit-row-remove:hover { color: var(--rust); }
+  #app .streak-cell { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--sage); }
+
+  /* ===== 计划表 ===== */
+  #app .full-width { margin-top: 22px; }
+  #app .schedule-wrap { overflow-x: auto; }
+  #app table.schedule-table { width: 100%; border-collapse: collapse; font-size: 12px; min-width: 640px; }
+  #app table.schedule-table th, #app table.schedule-table td { padding: 5px 4px; vertical-align: top; }
+  #app table.schedule-table th { font-family: 'IBM Plex Mono', monospace; font-weight: 400; color: var(--ink-soft); font-size: 10.5px; text-align: center; }
+  #app .slot-label-input { width: 100%; min-width: 64px; font-size: 11.5px; padding: 5px 6px; min-height: 36px; line-height: 1.4; resize: vertical; overflow: hidden; }
+  #app .cell-input { width: 100%; min-width: 84px; font-size: 12px; padding: 5px 6px; min-height: 42px; resize: vertical; overflow: hidden; }
+  #app .slot-row-remove { background: none; border: none; color: var(--ink-soft); font-size: 12px; cursor: pointer; padding: 6px 0 0 3px; vertical-align: top; }
+  #app .slot-row-remove:hover { color: var(--rust); }
+  #app .add-slot-row { margin-top: 10px; }
+
+  /* ===== 统计栏 / 底部 / 空态 ===== */
+  #app .stats-line { font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; color: var(--ink-soft); letter-spacing: 0.02em; margin-bottom: 14px; }
+  #app .stats-line b { color: var(--blue); font-weight: 500; }
+  #app .footer-note { margin-top: 24px; font-size: 11px; color: var(--ink-soft); text-align: center; }
+  #app .loading-state { padding: 40px 0; text-align: center; color: var(--ink-soft); font-size: 13px; }
+  #app .empty-state { font-size: 13px; color: var(--ink-soft); padding: 16px 0; text-align: center; border: 1px dashed var(--border); border-radius: 3px; }
+  #app .tip-badge { display: inline-block; background: var(--blue); color: #fff; font-size: 10px; padding: 2px 6px; border-radius: 3px; margin-left: 6px; cursor: help; }
+
+  /* ===== 弹窗（body 下直接 append 的，不在 #app 内）===== */
+  .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 9999; display: flex; align-items: center; justify-content: center; }
+  .modal-content { background: var(--card); border-radius: 8px; padding: 24px; max-width: 700px; width: 90%; max-height: 80vh; overflow-y: auto; box-shadow: 0 8px 32px rgba(0,0,0,0.2); }
+  .modal-title { margin: 0 0 16px; font-family: 'Newsreader', serif; font-size: 20px; color: var(--ink); }
+  .modal-close { float: right; background: none; border: none; font-size: 24px; color: var(--ink-soft); cursor: pointer; padding: 0; width: 32px; height: 32px; }
+  .modal-close:hover { color: var(--rust); }
+  .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 12px; margin-bottom: 16px; }
+  .stat-card { background: var(--card); border: 1px solid var(--border); border-radius: 4px; padding: 12px; text-align: center; }
+  .stat-value { font-family: 'Newsreader', serif; font-size: 28px; font-weight: 600; color: var(--blue); margin-bottom: 4px; }
+  .stat-label { font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; color: var(--ink-soft); }
+  .progress-bar { width: 100%; height: 8px; background: var(--blue-soft); border-radius: 4px; overflow: hidden; margin-top: 8px; }
+  .progress-fill { height: 100%; background: var(--blue); transition: width 0.3s ease; }
+
+  /* 帮助系统（在 modal 内）*/
+  .help-section { margin-bottom: 24px; }
+  .help-kbd { display: inline-block; background: #f5f5f5; border: 1px solid var(--border); border-radius: 3px; padding: 2px 6px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; margin: 0 2px; }
+  .help-tip { background: var(--blue-soft); border-left: 3px solid var(--blue); padding: 12px; border-radius: 3px; margin: 12px 0; font-size: 12.5px; line-height: 1.6; }
+  .help-warning { background: rgba(156,86,66,0.1); border-left: 3px solid var(--rust); padding: 12px; border-radius: 3px; margin: 12px 0; font-size: 12.5px; line-height: 1.6; }
+  .help-tabs { display: flex; gap: 8px; margin-bottom: 16px; border-bottom: 2px solid var(--border); }
+  .help-tab { padding: 8px 16px; background: none; border: none; font-size: 13px; cursor: pointer; color: var(--ink-soft); border-bottom: 2px solid transparent; margin-bottom: -2px; }
+  .help-tab.active { color: var(--blue); border-bottom-color: var(--blue); font-weight: 500; }
+  .help-content { display: none; }
+  .help-content.active { display: block; }
+
+  /* 欢迎引导（在 #app 内）*/
+  #app .welcome-card { background: linear-gradient(135deg, var(--blue-soft) 0%, var(--sage-soft) 100%); border: 2px solid var(--blue); border-radius: 8px; padding: 24px; margin-bottom: 20px; }
+  #app .welcome-title { font-family: 'Newsreader', serif; font-size: 22px; margin: 0 0 12px; color: var(--blue); }
+  #app .welcome-steps { display: grid; gap: 12px; margin-top: 16px; }
+  #app .welcome-step { background: var(--card); border-radius: 4px; padding: 12px; display: flex; gap: 12px; align-items: flex-start; }
+  #app .welcome-step-num { background: var(--blue); color: #fff; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 14px; flex-shrink: 0; }
+  #app .welcome-step-title { font-weight: 500; font-size: 13.5px; margin-bottom: 4px; }
+  #app .welcome-step-desc { font-size: 12px; color: var(--ink-soft); line-height: 1.5; }
+  #app .welcome-actions { display: flex; gap: 10px; margin-top: 16px; }
+
+  /* ===== 云端同步控制栏 ===== */
+  .cloud-sync-bar { position: fixed; top: 80px; right: 20px; z-index: 1000; background: var(--card); border: 1px solid var(--border); border-radius: 6px; padding: 6px 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+  .sync-controls { display: flex; align-items: center; gap: 8px; }
+  .sync-btn { background: none; border: none; color: var(--ink-soft); padding: 6px; cursor: pointer; border-radius: 4px; display: flex; align-items: center; }
+  .sync-btn:hover { background: var(--blue-soft); color: var(--blue); }
+  .sync-status { font-size: 11px; font-family: 'IBM Plex Mono', monospace; color: var(--ink-soft); min-width: 50px; }
+  .sync-status.syncing { color: var(--blue); animation: sync-pulse 1.5s ease-in-out infinite; }
+  .sync-status.success { color: var(--sage); }
+  .sync-status.error { color: var(--rust); }
+  @keyframes sync-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+  .sync-modal { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 9998; backdrop-filter: blur(4px); }
+  .sync-modal-content { background: var(--card); border: 1px solid var(--border); border-radius: 6px; padding: 28px; max-width: 460px; width: 90%; box-shadow: 0 8px 32px rgba(0,0,0,0.2); position: relative; }
+  .sync-modal-close { position: absolute; top: 14px; right: 14px; background: none; border: none; font-size: 26px; color: var(--ink-soft); cursor: pointer; padding: 2px 8px; border-radius: 3px; }
+  .sync-modal-close:hover { background: var(--blue-soft); }
+  .sync-modal-title { font-family: 'Newsreader', serif; font-size: 20px; font-weight: 600; margin: 0 0 16px; color: var(--ink); }
+  .sync-section { margin-bottom: 14px; }
+  .sync-hint { font-size: 13px; color: var(--ink-soft); line-height: 1.6; margin-bottom: 16px; }
+  .sync-form-group { margin-bottom: 14px; }
+  .sync-form-group label { display: block; font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--blue); margin-bottom: 5px; }
+  .sync-form-group input { width: 100%; padding: 8px 10px; border: 1px solid var(--border); border-radius: 3px; font-size: 13.5px; font-family: 'IBM Plex Mono', monospace; background: var(--card); color: var(--ink); }
+  .sync-form-group input:focus { outline: none; border-color: var(--blue); }
+  .sync-form-group small { display: block; font-size: 11.5px; color: var(--ink-soft); margin-top: 5px; }
+  .sync-actions { display: flex; gap: 10px; margin-top: 16px; }
+  .sync-primary-btn { flex: 1; padding: 9px 14px; border-radius: 3px; font-size: 13.5px; font-weight: 500; cursor: pointer; border: none; background: var(--blue); color: #fff; }
+  .sync-primary-btn:hover { background: #26405E; }
+  .sync-secondary-btn { flex: 1; padding: 9px 14px; border-radius: 3px; font-size: 13.5px; cursor: pointer; border: 1px solid var(--border); background: var(--card); color: var(--ink); }
+  .sync-secondary-btn:hover { border-color: var(--blue); color: var(--blue); }
+  .sync-danger-btn { flex: 1; padding: 9px 14px; border-radius: 3px; font-size: 13.5px; cursor: pointer; background: transparent; color: var(--rust); border: 1px solid var(--rust); }
+  .sync-danger-btn:hover { background: var(--rust); color: #fff; }
+  .sync-info { background: var(--sage-soft); padding: 12px; border-radius: 3px; margin-bottom: 14px; }
+  .sync-info p { margin: 0 0 4px; font-size: 13px; color: var(--ink); }
+  .sync-info p:last-child { margin-bottom: 0; }
+  .sync-last-sync { font-size: 11.5px !important; color: var(--ink-soft) !important; font-family: 'IBM Plex Mono', monospace; }
 
   @media (max-width: 768px) {
-    .cloud-sync-bar {
-      top: 60px;
-      right: 10px;
-    }
-
-    .sync-modal-content {
-      padding: 24px;
-      width: 95%;
-    }
-
-    .sync-actions {
-      flex-direction: column;
-    }
+    .cloud-sync-bar { top: 60px; right: 10px; }
+    .sync-modal-content { padding: 20px; }
+    .sync-actions { flex-direction: column; }
   }
 </style>
 
