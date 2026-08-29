@@ -1563,6 +1563,21 @@
     const disableSyncBtn = document.getElementById('disable-sync-btn');
     const lastSyncTimeEl = document.getElementById('last-sync-time');
 
+    // 调试：检查元素是否存在
+    console.log('Cloud Sync UI Elements:', {
+      syncBtn: !!syncBtn,
+      modal: !!modal,
+      closeBtn: !!closeBtn,
+      setupSection: !!setupSection,
+      activeSection: !!activeSection
+    });
+
+    if (!syncBtn || !modal) {
+      console.warn('Cloud sync UI elements not found, will retry...');
+      setTimeout(initCloudSyncUI, 100);
+      return;
+    }
+
     // 更新UI状态
     function updateSyncUI() {
       if (cloudPasskey) {
@@ -1580,12 +1595,13 @@
     }
 
     // 打开模态框
-    if (syncBtn) {
-      syncBtn.onclick = () => {
-        updateSyncUI();
-        modal.style.display = 'flex';
-      };
-    }
+    syncBtn.onclick = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      console.log('Sync settings button clicked');
+      updateSyncUI();
+      modal.style.display = 'flex';
+    };
 
     // 关闭模态框
     if (closeBtn) {
@@ -1596,14 +1612,12 @@
     }
 
     // 点击背景关闭
-    if (modal) {
-      modal.onclick = (e) => {
-        if (e.target === modal) {
-          modal.style.display = 'none';
-          passkeyInput.value = '';
-        }
-      };
-    }
+    modal.onclick = (e) => {
+      if (e.target === modal) {
+        modal.style.display = 'none';
+        passkeyInput.value = '';
+      }
+    };
 
     // 保存密钥并启用同步
     if (savePasskeyBtn) {
@@ -1675,11 +1689,16 @@
 
     // 初始化时更新UI
     updateSyncUI();
+    console.log('Cloud sync UI initialized successfully');
   }
 
-  // 页面加载完成后初始化云端同步UI
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initCloudSyncUI);
-  } else {
-    initCloudSyncUI();
-  }
+  // 在 loadData 之后初始化云端同步 UI
+  loadData().then(() => {
+    // 确保 DOM 已经准备好
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initCloudSyncUI);
+    } else {
+      // 延迟一点确保元素已经渲染
+      setTimeout(initCloudSyncUI, 100);
+    }
+  });
