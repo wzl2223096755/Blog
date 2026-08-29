@@ -1543,10 +1543,7 @@
     if (showFullHelpBtn) showFullHelpBtn.onclick = () => { dismissWelcome(); showHelpPanel(); };
   }
 
-  // 初始化键盘快捷键
-  setupKeyboardShortcuts();
-  
-  
+
   // ========== 云端同步 UI 初始化（在 IIFE 内部，可访问所有变量）==========
   function initCloudSyncUI() {
     const syncBtn = document.getElementById('sync-settings-btn');
@@ -1560,7 +1557,10 @@
     const disableSyncBtn = document.getElementById('disable-sync-btn');
     const lastSyncTimeEl = document.getElementById('last-sync-time');
 
-    if (!syncBtn || !modal) return;
+    if (!syncBtn || !modal) {
+      setTimeout(initCloudSyncUI, 200);
+      return;
+    }
 
     function refreshUI() {
       if (cloudPasskey) {
