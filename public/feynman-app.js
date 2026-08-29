@@ -1217,7 +1217,7 @@
           <p class="panel-hint">先默讲一遍再点开卡片；复习后评分（或按数字键1-4），系统按间隔自动安排下次复习。卡片第③步「卡壳的地方」会自动进「盲点清单」。</p>
           
           <!-- 搜索框 -->
-          <div style="margin-bottom:14px;">
+          <div class="search-bar">
             <input type="text" id="search-input" placeholder="🔍 搜索卡片内容（Ctrl+F）..." value="${escapeAttr(searchQuery)}" style="width:100%;padding:8px 12px;font-size:13px;">
             ${searchQuery ? `<div style="font-size:11.5px;color:var(--blue);margin-top:4px;">找到 ${searchFiltered.length} 张卡片</div>` : ''}
           </div>

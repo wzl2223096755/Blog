@@ -177,15 +177,80 @@ const pageDescription = "基于费曼学习法和间隔重复算法的学习工�
     margin: 0;
   }
 
+  /* 外层布局：费曼panel(大) + 习惯panel(小) */
   #app .layout {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 24px;
+    grid-template-columns: 2fr 1fr;
+    gap: 20px;
     align-items: start;
-    margin-bottom: 24px;
+    margin-bottom: 20px;
   }
 
-  @media (max-width: 1100px) {
+  /* 费曼panel内部：新建表单(左) | 卡片列表+盲点清单(右) */
+  #app #feynman-panel {
+    display: grid;
+    grid-template-columns: 360px 1fr;
+    gap: 0 20px;
+    align-items: start;
+  }
+
+  /* 跨两列的元素：标题、提示、搜索框、筛选器 */
+  #app #feynman-panel > .panel-title,
+  #app #feynman-panel > .panel-hint,
+  #app #feynman-panel > .search-bar,
+  #app #feynman-panel > .subject-filter {
+    grid-column: 1 / -1;
+    margin-bottom: 12px;
+  }
+
+  #app #feynman-panel > .search-bar {
+    margin-bottom: 0;
+  }
+
+  /* 新建表单：左列，粘性定位跟随滚动 */
+  #app .new-card-form {
+    grid-column: 1;
+    position: sticky;
+    top: 80px;
+    margin-bottom: 0;
+  }
+
+  /* 搜索栏样式 */
+  #app .search-bar {
+    margin-bottom: 8px;
+  }
+
+  /* 卡片列表：右列 */
+  #app #fcard-list {
+    grid-column: 2;
+  }
+
+  /* 盲点清单：右列，卡片列表下方 */
+  #app .gap-bank {
+    grid-column: 2;
+  }
+
+  /* 窄屏：费曼panel内部变单列 */
+  @media (max-width: 1280px) {
+    #app #feynman-panel {
+      grid-template-columns: 1fr;
+    }
+    #app #feynman-panel > .panel-title,
+    #app #feynman-panel > .panel-hint,
+    #app #feynman-panel > .search-bar,
+    #app #feynman-panel > .subject-filter,
+    #app .new-card-form,
+    #app #fcard-list,
+    #app .gap-bank {
+      grid-column: 1;
+    }
+    #app .new-card-form {
+      position: static;
+    }
+  }
+
+  /* 更窄屏：外层也变单列 */
+  @media (max-width: 900px) {
     #app .layout {
       grid-template-columns: 1fr;
     }
