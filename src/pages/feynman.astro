@@ -123,41 +123,24 @@ const pageDescription = "基于费曼学习法和间隔重复算法的学习工�
   #app * { box-sizing: border-box; }
 
   /* ===== 布局 ===== */
+  /* 外层两列：费曼(大) + 习惯(小)，与原始 HTML 一致 */
   #app .layout {
     display: grid;
-    grid-template-columns: 2fr 1fr;
+    grid-template-columns: 1.3fr 1fr;
     gap: 22px;
     align-items: start;
     margin-bottom: 22px;
   }
 
-  /* 费曼 panel 内部：新建表单(左) | 卡片列表+盲点清单(右) */
+  /* 费曼 panel 内部：单列，不再做内部双栏 */
   #app #feynman-panel {
-    display: grid;
-    grid-template-columns: 360px 1fr;
-    gap: 0 20px;
-    align-items: start;
+    display: block;
   }
-  #app #feynman-panel > .panel-title,
-  #app #feynman-panel > .panel-hint,
-  #app #feynman-panel > .search-bar,
-  #app #feynman-panel > .subject-filter { grid-column: 1 / -1; }
-  #app .new-card-form { grid-column: 1; position: sticky; top: 80px; }
-  #app #fcard-list { grid-column: 2; }
-  #app .gap-bank { grid-column: 2; }
+  #app .new-card-form { position: static; margin-bottom: 18px; }
+  #app #fcard-list { }
+  #app .gap-bank { }
 
-  @media (max-width: 1280px) {
-    #app #feynman-panel { grid-template-columns: 1fr; }
-    #app #feynman-panel > .panel-title,
-    #app #feynman-panel > .panel-hint,
-    #app #feynman-panel > .search-bar,
-    #app #feynman-panel > .subject-filter,
-    #app .new-card-form,
-    #app #fcard-list,
-    #app .gap-bank { grid-column: 1; }
-    #app .new-card-form { position: static; }
-  }
-  @media (max-width: 900px) {
+  @media (max-width: 800px) {
     #app .layout { grid-template-columns: 1fr; }
   }
 
