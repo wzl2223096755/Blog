@@ -1,12 +1,28 @@
 ---
-import MainGridLayout from "@/layouts/MainGridLayout.astro";
+import Layout from "@/layouts/Layout.astro";
+import Navbar from "@/components/layout/Navbar.astro";
+import { siteConfig } from "@/config";
 
 const pageTitle = "费曼学习卡 · 习惯记录本";
 const pageDescription = "基于费曼学习法和间隔重复算法的学习工具，帮助你更好地理解和记忆知识。";
+const stickyNavbar = siteConfig.navbar.stickyNavbar ?? false;
 ---
 
-<MainGridLayout title={pageTitle} description={pageDescription}>
-  <!-- 使用博客框架，但扩展内容区域 -->
+<Layout title={pageTitle} description={pageDescription}>
+  <!-- 顶部导航栏 -->
+  <div
+    id="top-row"
+    class:list={[
+      "z-50 pointer-events-none relative w-full",
+      stickyNavbar ? "fixed top-0 left-0 right-0" : "",
+    ]}
+  >
+    <div class:list={["pointer-events-auto", stickyNavbar ? "" : "sticky top-0"]}>
+      <Navbar />
+    </div>
+  </div>
+
+  <!-- 费曼应用：全宽，无侧边栏约束 -->
   <div class="feynman-fullwidth">
     <!-- 云端同步控制栏 -->
     <div id="cloud-sync-bar" class="cloud-sync-bar">
@@ -62,7 +78,7 @@ const pageDescription = "基于费曼学习法和间隔重复算法的学习工�
     
     <div id="app" class="loading-state">正在加载数据…</div>
   </div>
-</MainGridLayout>
+</Layout>>
 
 <style is:global>
   @import url('https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,500;0,600;1,400;1,500&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
@@ -70,16 +86,13 @@ const pageDescription = "基于费曼学习法和间隔重复算法的学习工�
   /* ===== 背景容器 + CSS 变量（与原始 HTML 完全一致，供 JS 模板 inline style 使用）===== */
   .feynman-fullwidth {
     width: 100%;
-    max-width: 100vw;
-    position: relative;
-    margin: -2rem 0;
-    padding: 3rem 5vw;
+    padding: 32px 20px 64px;
     background-color: #F3F1EA;
     background-image:
       linear-gradient(rgba(47,76,116,0.09) 1px, transparent 1px),
       linear-gradient(90deg, rgba(47,76,116,0.09) 1px, transparent 1px);
     background-size: 28px 28px;
-    min-height: calc(100vh - 200px);
+    min-height: 100vh;
     box-sizing: border-box;
     --paper: #F3F1EA;
     --card: #FFFDF8;
@@ -114,7 +127,7 @@ const pageDescription = "基于费曼学习法和间隔重复算法的学习工�
 
   /* ===== #app 容器 ===== */
   #app {
-    max-width: 1200px;
+    max-width: 980px;
     margin: 0 auto;
     padding: 0;
     font-family: 'IBM Plex Sans', sans-serif;
