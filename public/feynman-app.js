@@ -1551,6 +1551,29 @@
 
 
   // ========== 云端同步 UI 事件处理 ==========
+  
+  // UI 更新函数 - 放在外部以便在其他地方调用
+  let syncUIElements = null;
+  
+  function updateSyncUIDisplay() {
+    if (!syncUIElements) return;
+    
+    const { setupSection, activeSection, lastSyncTimeEl } = syncUIElements;
+    
+    if (cloudPasskey) {
+      setupSection.style.display = 'none';
+      activeSection.style.display = 'block';
+      if (lastSyncTime) {
+        lastSyncTimeEl.textContent = lastSyncTime.toLocaleString('zh-CN');
+      } else {
+        lastSyncTimeEl.textContent = '未同步';
+      }
+    } else {
+      setupSection.style.display = 'block';
+      activeSection.style.display = 'none';
+    }
+  }
+  
   function initCloudSyncUI() {
     const syncBtn = document.getElementById('sync-settings-btn');
     const modal = document.getElementById('sync-settings-modal');
@@ -1578,28 +1601,15 @@
       return;
     }
 
-    // 更新UI状态
-    function updateSyncUI() {
-      if (cloudPasskey) {
-        setupSection.style.display = 'none';
-        activeSection.style.display = 'block';
-        if (lastSyncTime) {
-          lastSyncTimeEl.textContent = lastSyncTime.toLocaleString('zh-CN');
-        } else {
-          lastSyncTimeEl.textContent = '未同步';
-        }
-      } else {
-        setupSection.style.display = 'block';
-        activeSection.style.display = 'none';
-      }
-    }
+    // 保存元素引用
+    syncUIElements = { setupSection, activeSection, lastSyncTimeEl };
 
     // 打开模态框
     syncBtn.onclick = (e) => {
       e.preventDefault();
       e.stopPropagation();
       console.log('Sync settings button clicked');
-      updateSyncUI();
+      updateSyncUIDisplay();
       modal.style.display = 'flex';
     };
 
@@ -1646,7 +1656,7 @@
           });
           
           alert('云端同步已启用！数据已上传到云端。');
-          updateSyncUI();
+          updateSyncUIDisplay();
           passkeyInput.value = '';
         } catch(e) {
           alert('同步失败：' + e.message);
@@ -1668,7 +1678,7 @@
             scheduleCells: scheduleCells
           });
           alert('同步成功！');
-          updateSyncUI();
+          updateSyncUIDisplay();
         } catch(e) {
           alert('同步失败：' + e.message);
         }
@@ -1680,7 +1690,7 @@
       disableSyncBtn.onclick = () => {
         if (confirm('确定要禁用云端同步吗？本地数据不会被删除，但将不再自动同步到云端。')) {
           clearPasskey();
-          updateSyncUI();
+          updateSyncUIDisplay();
           updateSyncStatus('', '');
           alert('云端同步已禁用');
         }
@@ -1688,7 +1698,7 @@
     }
 
     // 初始化时更新UI
-    updateSyncUI();
+    updateSyncUIDisplay();
     console.log('Cloud sync UI initialized successfully');
   }
 

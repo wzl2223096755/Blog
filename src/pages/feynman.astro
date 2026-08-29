@@ -178,10 +178,16 @@ const pageDescription = "基于费曼学习法和间隔重复算法的学习工�
   }
 
   #app .layout {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
     gap: 24px;
     margin-bottom: 24px;
+  }
+
+  @media (max-width: 1200px) {
+    #app .layout {
+      grid-template-columns: 1fr;
+    }
   }
 
   #app .panel {
