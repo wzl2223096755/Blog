@@ -122,27 +122,14 @@ const pageDescription = "基于费曼学习法和间隔重复算法的学习工�
   }
   #app * { box-sizing: border-box; }
 
-  /* ===== 布局 ===== */
-  /* 外层两列：费曼(大) + 习惯(小)，与原始 HTML 一致 */
+  /* ===== 布局：全部单列，从上到下 ===== */
   #app .layout {
-    display: grid;
-    grid-template-columns: 1.3fr 1fr;
+    display: flex;
+    flex-direction: column;
     gap: 22px;
-    align-items: start;
     margin-bottom: 22px;
   }
-
-  /* 费曼 panel 内部：单列，不再做内部双栏 */
-  #app #feynman-panel {
-    display: block;
-  }
   #app .new-card-form { position: static; margin-bottom: 18px; }
-  #app #fcard-list { }
-  #app .gap-bank { }
-
-  @media (max-width: 800px) {
-    #app .layout { grid-template-columns: 1fr; }
-  }
 
   /* ===== Panel ===== */
   #app .panel { background: var(--card); border: 1px solid var(--border); border-radius: 4px; padding: 20px; }
